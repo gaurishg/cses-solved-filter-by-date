@@ -269,7 +269,6 @@
       const c = classifyTask(li);
       if (c.solved) correct++; else if (c.attempted) wrong++; else unattended++;
     });
-    const label = `[${total} / ${correct} / ${wrong} / ${unattended}]`;
     const base = heading.getAttribute('data-base-text') || heading.textContent.trim();
     heading.setAttribute('data-base-text', base);
     let badge = heading.querySelector(':scope > .cses-section-stats');
@@ -279,7 +278,8 @@
       badge.style.cssText = 'margin-right:6px;font-weight:normal;font-size:0.75em;color:#888;';
       heading.prepend(badge);
     }
-    badge.textContent = label + ' ';
+  badge.innerHTML = `[<span style="color:#ccc;">${total}</span> / <span style="color:#3c9b3c;">${correct}</span> / <span style="color:#d28b26;">${wrong}</span> / <span style="color:#777;">${unattended}</span>] `;
+  badge.title = 'Overall: total / solved / wrong (attempted unsolved) / unattended';
     heading.dataset.sectionOverall = JSON.stringify({ total, correct, wrong, unattended });
   }
 
@@ -351,8 +351,8 @@
         filteredBadge.style.cssText = 'margin-left:8px;font-weight:normal;font-size:0.7em;color:#5aa;';
         heading.appendChild(filteredBadge);
       }
-      filteredBadge.textContent = `[filtered ${filteredSolved} / ${filteredWrong} / ${filteredUnatt}]`;
-      filteredBadge.title = 'Filtered counts with current date threshold: solved / wrong / unattended (older solved treated as unattended)';
+  filteredBadge.innerHTML = `[filtered <span style="color:#3c9b3c;">${filteredSolved}</span> / <span style="color:#d28b26;">${filteredWrong}</span> / <span style="color:#777;">${filteredUnatt}</span>]`;
+  filteredBadge.title = 'Filtered (date threshold): solved-after-threshold / wrong (attempted unsolved) / old-or-unattended';
     });
     // Aggregate into first heading with zero tasks (e.g. General) if present
     const general = sections.find(s => !s.list.querySelector('li.task'));
@@ -360,7 +360,10 @@
       const h = general.heading;
       // Left badge already shows [0/0/0/0] -> replace with aggregate overall
       let overallBadge = h.querySelector(':scope > .cses-section-stats');
-      if (overallBadge) overallBadge.textContent = `[${aggTotal} / ${aggSolved} / ${aggWrong} / ${aggUnatt}] `;
+      if (overallBadge) {
+        overallBadge.innerHTML = `[<span style="color:#ccc;">${aggTotal}</span> / <span style="color:#3c9b3c;">${aggSolved}</span> / <span style="color:#d28b26;">${aggWrong}</span> / <span style="color:#777;">${aggUnatt}</span>] `;
+        overallBadge.title = 'Overall totals across all sections: total / solved / wrong / unattended';
+      }
       let filteredBadge = h.querySelector(':scope > .cses-section-stats-filter');
       if (!filteredBadge) {
         filteredBadge = document.createElement('span');
@@ -368,8 +371,8 @@
         filteredBadge.style.cssText = 'margin-left:8px;font-weight:normal;font-size:0.7em;color:#5aa;';
         h.appendChild(filteredBadge);
       }
-      filteredBadge.textContent = `[filtered ${aggFilteredSolved} / ${aggFilteredWrong} / ${aggFilteredUnatt}]`;
-      filteredBadge.title = 'Aggregate filtered counts across all sections';
+  filteredBadge.innerHTML = `[filtered <span style="color:#3c9b3c;">${aggFilteredSolved}</span> / <span style="color:#d28b26;">${aggFilteredWrong}</span> / <span style="color:#777;">${aggFilteredUnatt}</span>]`;
+  filteredBadge.title = 'Aggregate filtered counts (date threshold) across all sections';
     }
   }
 
