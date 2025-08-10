@@ -280,6 +280,7 @@
       heading.prepend(badge);
     }
     badge.textContent = label + ' ';
+    heading.dataset.sectionOverall = JSON.stringify({ total, correct, wrong, unattended });
   }
 
   function buildSectionStats() {
@@ -294,10 +295,82 @@
           sectionQueue.push(async () => {
             await getSubmissionMeta(c.problemId);
             updateSectionHeading(section);
+            updateFilteredSectionStats();
           });
         }
       });
     });
+    updateFilteredSectionStats();
+  }
+
+  /** Compute filtered stats (post date filter) and display to right of heading */
+  function updateFilteredSectionStats() {
+    const threshold = getThresholdDate();
+    const sections = findSections();
+    let aggTotal=0, aggSolved=0, aggWrong=0, aggUnatt=0, aggFilteredSolved=0, aggFilteredWrong=0, aggFilteredUnatt=0;
+    sections.forEach(section => {
+      const { heading, list } = section;
+      const tasks = Array.from(list.querySelectorAll('li.task'));
+      let filteredSolved=0, filteredWrong=0, filteredUnatt=0;
+      tasks.forEach(li => {
+        const icon = li.querySelector('span.task-score.icon');
+        if (!icon) return;
+        const originallySolved = icon.dataset.originalSolved === '1' || icon.classList.contains('full');
+        const isSolvedNow = icon.classList.contains('full');
+        const wrongImmediate = icon.classList.contains('zero');
+        const link = li.querySelector('a[href*="/problemset/task/"]');
+        const problemId = link ? (link.getAttribute('href')||'').match(/(\d+)/)?.[1] : null;
+        let attempted = false;
+        if (wrongImmediate) attempted = true; else if (problemId) {
+          const cacheVal = localStorage.getItem(CACHE_PREFIX + problemId);
+            if (cacheVal && cacheVal !== 'NONE') attempted = true;
+        }
+        // Overall aggregate from stored dataset (faster) else recompute minimal
+        aggTotal++;
+        if (originallySolved) aggSolved++; else if (attempted) aggWrong++; else aggUnatt++;
+        // Filtered logic: treat hidden previously-solved tasks (originallySolved && !isSolvedNow) as unattended for the filtered period.
+        if (isSolvedNow && originallySolved) {
+          filteredSolved++; aggFilteredSolved++;
+        } else if (attempted && !originallySolved) {
+          filteredWrong++; aggFilteredWrong++;
+        } else if (originallySolved && !isSolvedNow) {
+          filteredUnatt++; aggFilteredUnatt++;
+        } else if (!originallySolved && !attempted) {
+          filteredUnatt++; aggFilteredUnatt++;
+        } else {
+          // fallback
+          filteredUnatt++; aggFilteredUnatt++;
+        }
+      });
+      // Skip headings with zero tasks (handled later as General aggregate)
+      if (!tasks.length) return;
+      let filteredBadge = heading.querySelector(':scope > .cses-section-stats-filter');
+      if (!filteredBadge) {
+        filteredBadge = document.createElement('span');
+        filteredBadge.className = 'cses-section-stats-filter';
+        filteredBadge.style.cssText = 'margin-left:8px;font-weight:normal;font-size:0.7em;color:#5aa;';
+        heading.appendChild(filteredBadge);
+      }
+      filteredBadge.textContent = `[filtered ${filteredSolved} / ${filteredWrong} / ${filteredUnatt}]`;
+      filteredBadge.title = 'Filtered counts with current date threshold: solved / wrong / unattended (older solved treated as unattended)';
+    });
+    // Aggregate into first heading with zero tasks (e.g. General) if present
+    const general = sections.find(s => !s.list.querySelector('li.task'));
+    if (general) {
+      const h = general.heading;
+      // Left badge already shows [0/0/0/0] -> replace with aggregate overall
+      let overallBadge = h.querySelector(':scope > .cses-section-stats');
+      if (overallBadge) overallBadge.textContent = `[${aggTotal} / ${aggSolved} / ${aggWrong} / ${aggUnatt}] `;
+      let filteredBadge = h.querySelector(':scope > .cses-section-stats-filter');
+      if (!filteredBadge) {
+        filteredBadge = document.createElement('span');
+        filteredBadge.className = 'cses-section-stats-filter';
+        filteredBadge.style.cssText = 'margin-left:8px;font-weight:normal;font-size:0.7em;color:#5aa;';
+        h.appendChild(filteredBadge);
+      }
+      filteredBadge.textContent = `[filtered ${aggFilteredSolved} / ${aggFilteredWrong} / ${aggFilteredUnatt}]`;
+      filteredBadge.title = 'Aggregate filtered counts across all sections';
+    }
   }
 
   /** Apply filter logic; if forceRefetch true we ignore cache presence (by deleting entries first) */
@@ -360,12 +433,15 @@
         processed++;
         if (processed % 5 === 0 || processed === total) {
           setStatus(`Processed ${processed}/${total} solved problems (fetched ${fetched}). Threshold ${toISODate(threshold)}.`);
+          updateFilteredSectionStats();
         }
       });
     });
 
     setStatus(`Queued ${solvedIcons.length} solved problems...`);
   console.log('[CSES Filter] Queue filled. Beginning async fetches.');
+    // initial filtered stats update after resetting icons
+    updateFilteredSectionStats();
   }
 
   // Kick off after DOM ready (document-end should already suffice)
