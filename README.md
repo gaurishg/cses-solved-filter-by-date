@@ -1,11 +1,15 @@
-This repository contains a script written in Javascript with type hints which can be used with Tampermonkey extension (https://www.tampermonkey.net/) in the browser. It is supposed to be used on the CSES (https://cses.fi/problemset/list/) website.
+This repository contains a userscript (plain JavaScript, no external deps, no GM_* grants) for Tampermonkey (https://www.tampermonkey.net/) that enhances the CSES Problemset List page (https://cses.fi/problemset/list/).
 
-It does:
-1. Makes available a date input button (preferably using calendar selector) in the top left corner.
-2. On the CSES problem list page (https://cses.fi/problemset/list/) if the problem has last submission before the selected date, it does not shows the check mark (<span class="task-score icon full"></span>) which indicates that the problem has been solved. It does that by removing the class `full` (<span class="task-score icon "></span>).
+Core purpose:
+Provide a date-based view of progress: hide solved check marks for problems whose last submission is before a chosen cutoff date so you can focus on (re)solving more recent material.
 
-A CSES problems's description can be found at the url https://cses.fi/problemset/task/<problem id>/ 
-Submissions to a problem can be found at the url https://cses.fi/problemset/submit/<problem id>/
+Additionally it augments each section heading with compact progress statistics (overall and date‑filtered) and distinguishes solved, wrong-attempted, and unattended problems.
+
+Data sources:
+- Problem statement: `https://cses.fi/problemset/task/<id>/`
+- Submission list (scraped for timestamps): `https://cses.fi/problemset/submit/<id>/`
+
+The script parses the first `YYYY-MM-DD HH:MM:SS` timestamp it encounters on the submission page (typically the latest submission) and caches it.
 
 ## Installation
 1. Install Tampermonkey (or another compatible userscript manager) in your browser.
@@ -14,23 +18,48 @@ Submissions to a problem can be found at the url https://cses.fi/problemset/subm
 
 ## Usage
 1. Visit the CSES problem list page.
-2. A small panel appears in the top-left containing a date picker, a Clear Cache button, and a status line.
-3. Select the cutoff date. Any solved check mark whose latest submission is strictly before midnight of that date is hidden.
-4. Move the date earlier to restore hidden check marks (they reappear because they are re-evaluated).
-5. Alt+Click on an individual solved icon to clear its cached submission timestamp and refetch.
+2. A compact fixed panel appears top-left with:
+	- Date picker (defaults to today, persisted in `localStorage`)
+	- Clear Cache button
+	- Status line with progress (fetching, filtered counts)
+3. Pick a cutoff date. Any solved icon (`<span class="task-score icon full"></span>`) whose last submission time is strictly earlier than the start (midnight) of that date is hidden (its `full` class is removed).
+4. Changing the date re-evaluates all problems; moving the date earlier reveals previously hidden solves.
+5. Alt+Click a solved icon to invalidate just that problem's cache and refetch its latest submission time.
+6. Section Headings: Each heading shows two bracketed badge groups:
+	- Left (Overall): `total / solved / wrong / unattended`
+	- Right (Filtered): Same metrics after applying the current date filter (older solved problems treated as if unsolved for the filtered view). An aggregate "General" heading gives totals across all sections.
+
+### Badge Color Legend
+Colors (may depend on your theme, implemented via inline styles):
+- Solved: green
+- Wrong (at least one wrong submission, not yet solved): orange
+- Unattended: gray
+
+Tooltips on badges clarify whether you are looking at overall or filtered stats.
 
 ## Caching
-Submission timestamps are cached in `localStorage` under keys `cses:lastSubmission:<id>` (ISO string). A version key `cses:lastSubmission:__version` allows invalidation when parsing logic changes.
+Per-problem metadata is stored in `localStorage`:
+- Key: `cses:lastSubmission:<id>` => ISO timestamp string of most recent submission, or the sentinel `NONE` (meaning we looked and found no submissions yet).
+- Version key: `cses:lastSubmission:__version` for transparent invalidation if parsing logic changes.
 
-Use the Clear Cache button to purge all cached timestamps.
+The date picker value is also persisted so your context remains between visits.
+
+Clear Cache button removes all `cses:lastSubmission:*` entries (except internal version management) prompting refetch on next evaluation.
 
 ## Concurrency and Performance
-Requests for submission pages are limited to 3 concurrent fetches to avoid overloading the CSES servers. Status updates show progress as icons are processed.
+Network fetches for submission pages are processed through a tiny queue limited to 3 concurrent requests for courtesy to CSES. Section stat resolution that needs to discover whether a problem was attempted also reuses cached metadata to avoid duplicate fetches.
+
+DOM updates are minimized: the script only toggles the `full` class, updates titles/tooltips, and injects small badge spans into section headers.
 
 ## Future Ideas
-- Option to gray out (instead of hide) older solves.
-- Tooltip enhancements (currently shows last submission date when available).
-- Potential batch API usage if CSES ever exposes an endpoint.
+- Option to gray out instead of fully hiding historic solves.
+- Separate category for "hidden historic solved" in filtered stats (currently they move into the filtered unattended count for simplicity).
+- Smarter timestamp parsing (ensure absolute latest submission if multiple matches appear).
+- Batch API usage if CSES offers an endpoint (would reduce request volume).
+- Optional legend / settings toggle panel (show/hide stats, choose styling).
 
 ## Disclaimer
-This script is a convenience tool. Use responsibly and avoid unnecessary repeated cache clears that cause extra network load.
+This script is a convenience tool. Use responsibly—avoid unnecessary repeated cache clears that cause extra network load. Not affiliated with CSES.
+
+## License
+Released under the MIT License (see `LICENSE`).
