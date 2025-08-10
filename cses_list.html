@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet alternate" type="text/css" href="/cses.css?0" id="styles">
+    <link rel="stylesheet " type="text/css" href="/cses-dark.css?0" id="styles-dark">
+    <meta name="theme-color" content="#292929" id="theme-color">
+    <script type="application/json" id="darkmode-enabled">true</script>
+    <script src="/ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="/lib/fontawesome/css/all.min.css">
+</head>
+
+<body class=" ">
+    <div class="header">
+        <div>
+            <a href="/" class="logo"><img src="/logo.png?1" alt="CSES"></a>
+            <a class="menu-toggle" onclick="document.body.classList.toggle('menu-open');">
+                <i class="fas fa-bars"></i>
+            </a>
+            <div class="controls">
+                <a class="account" href="/user/318117">Rusty001</a>
+                <span>&mdash;</span>
+                <a href="/darkmode" title="Toggle dark mode" onclick="return toggle_theme()"><i aria-label="Dark mode"
+                        class="fas fa-adjust"></i><span>Dark mode</span></a>
+                <a href="/logout" title="Log out"><i aria-label="Log out" class="fas fa-sign-out-alt"></i><span>Log
+                        out</span></a>
+            </div>
+        </div>
+    </div>
+    <div class="skeleton">
+        <div class="navigation">
+            <div class="title-block">
+                <h1>CSES Problem Set</h1>
+                <ul class="nav">
+                    <li><a href="/problemset/list" class="current">Tasks</a></li>
+                    <li><a href="/problemset/stats">Statistics</a></li>
+                    <li><a href="/problemset/hacks">Hacks</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="content-wrapper">
+            <div class="content">
+                <title>CSES - CSES Problem Set - Tasks</title>
+                <h2>General</h2>
+                <ul class="task-list">
+                    <li class="text"><a href="/problemset/text/2433">Introduction</a>
+                    <li class="link"><a href="https://cses.fi/register/?open">Create new account</a>
+                    <li class="link"><a href="https://cses.fi/problemset/stats/">Statistics</a>
+                </ul>
+                <h2>Introductory Problems</h2>
+                <ul class="task-list">
+                    <li class="task"><a href="/problemset/task/1068">Weird Algorithm</a><span class="detail">138889 /
+                            145483</span> <span class="task-score icon full"></span>
+                    <li class="task"><a href="/problemset/task/1083">Missing Number</a><span class="detail">119526 /
+                            125481</span> <span class="task-score icon full"></span>
+                    <li class="task"><a href="/problemset/task/1069">Repetitions</a><span class="detail">104331 /
+                            108701</span> <span class="task-score icon full"></span>
+                    <li class="task"><a href="/problemset/task/1094">Increasing Array</a><span class="detail">97918 /
+                            101581</span> <span class="task-score icon full"></span>
+                    <li class="task"><a href="/problemset/task/1070">Permutations</a><span class="detail">86120 /
+                            88844</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1071">Number Spiral</a><span class="detail">60874 /
+                            66409</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1072">Two Knights</a><span class="detail">46389 /
+                            47901</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1092">Two Sets</a><span class="detail">50441 /
+                            54408</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1617">Bit Strings</a><span class="detail">57924 /
+                            61177</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1618">Trailing Zeros</a><span class="detail">54032 /
+                            57541</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1754">Coin Piles</a><span class="detail">47839 /
+                            52467</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1755">Palindrome Reorder</a><span class="detail">44333 /
+                            46862</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2205">Gray Code</a><span class="detail">29317 /
+                            33084</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2165">Tower of Hanoi</a><span class="detail">27134 /
+                            28226</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1622">Creating Strings</a><span class="detail">37587 /
+                            38593</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1623">Apple Division</a><span class="detail">37411 /
+                            42421</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1624">Chessboard and Queens</a><span class="detail">22514
+                            / 22941</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3399">Raab Game I</a><span class="detail">2135 /
+                            2433</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3419">Mex Grid Construction</a><span class="detail">2031
+                            / 2168</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3217">Knight Moves Grid</a><span class="detail">2091 /
+                            2132</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3311">Grid Coloring I</a><span class="detail">1670 /
+                            1727</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2431">Digit Queries</a><span class="detail">15869 /
+                            18654</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1743">String Reorder</a><span class="detail">1808 /
+                            2100</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1625">Grid Path Description</a><span class="detail">8949
+                            / 11668</span> <span class="task-score icon "></span>
+                </ul>
+                <h2>Sorting and Searching</h2>
+                <ul class="task-list">
+                    <li class="task"><a href="/problemset/task/1621">Distinct Numbers</a><span class="detail">67551 /
+                            73198</span> <span class="task-score icon full"></span>
+                    <li class="task"><a href="/problemset/task/1084">Apartments</a><span class="detail">49970 /
+                            55767</span> <span class="task-score icon full"></span>
+                    <li class="task"><a href="/problemset/task/1090">Ferris Wheel</a><span class="detail">47969 /
+                            51975</span> <span class="task-score icon full"></span>
+                    <li class="task"><a href="/problemset/task/1091">Concert Tickets</a><span class="detail">38628 /
+                            45208</span> <span class="task-score icon full"></span>
+                    <li class="task"><a href="/problemset/task/1619">Restaurant Customers</a><span class="detail">39392
+                            / 42620</span> <span class="task-score icon full"></span>
+                    <li class="task"><a href="/problemset/task/1629">Movie Festival</a><span class="detail">37711 /
+                            40026</span> <span class="task-score icon full"></span>
+                    <li class="task"><a href="/problemset/task/1640">Sum of Two Values</a><span class="detail">44054 /
+                            49546</span> <span class="task-score icon full"></span>
+                    <li class="task"><a href="/problemset/task/1643">Maximum Subarray Sum</a><span class="detail">42839
+                            / 44804</span> <span class="task-score icon full"></span>
+                    <li class="task"><a href="/problemset/task/1074">Stick Lengths</a><span class="detail">38228 /
+                            40084</span> <span class="task-score icon full"></span>
+                    <li class="task"><a href="/problemset/task/2183">Missing Coin Sum</a><span class="detail">28482 /
+                            29565</span> <span class="task-score icon full"></span>
+                    <li class="task"><a href="/problemset/task/2216">Collecting Numbers</a><span class="detail">29186 /
+                            31352</span> <span class="task-score icon full"></span>
+                    <li class="task"><a href="/problemset/task/2217">Collecting Numbers II</a><span class="detail">11958
+                            / 15438</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1141">Playlist</a><span class="detail">29266 /
+                            33625</span> <span class="task-score icon full"></span>
+                    <li class="task"><a href="/problemset/task/1073">Towers</a><span class="detail">29732 / 31929</span>
+                        <span class="task-score icon full"></span>
+                    <li class="task"><a href="/problemset/task/1163">Traffic Lights</a><span class="detail">22961 /
+                            25829</span> <span class="task-score icon full"></span>
+                    <li class="task"><a href="/problemset/task/3420">Distinct Values Subarrays</a><span
+                            class="detail">3160 / 3315</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3421">Distinct Values Subsequences</a><span
+                            class="detail">2177 / 2440</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2162">Josephus Problem I</a><span class="detail">17320 /
+                            19224</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2163">Josephus Problem II</a><span class="detail">9360 /
+                            12908</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2168">Nested Ranges Check</a><span class="detail">9835 /
+                            11413</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2169">Nested Ranges Count</a><span class="detail">6711 /
+                            7940</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1164">Room Allocation</a><span class="detail">17260 /
+                            19929</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1620">Factory Machines</a><span class="detail">24336 /
+                            26669</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1630">Tasks and Deadlines</a><span class="detail">19809 /
+                            20245</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1631">Reading Books</a><span class="detail">16034 /
+                            17192</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1641">Sum of Three Values</a><span class="detail">23541 /
+                            26195</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1642">Sum of Four Values</a><span class="detail">14614 /
+                            16401</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1645">Nearest Smaller Values</a><span
+                            class="detail">19573 / 20258</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1660">Subarray Sums I</a><span class="detail">25759 /
+                            27595</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1661">Subarray Sums II</a><span class="detail">23211 /
+                            27829</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1662">Subarray Divisibility</a><span class="detail">21434
+                            / 23480</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2428">Distinct Values Subarrays II</a><span
+                            class="detail">12535 / 13973</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1085">Array Division</a><span class="detail">20263 /
+                            21379</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1632">Movie Festival II</a><span class="detail">10722 /
+                            13031</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1644">Maximum Subarray Sum II</a><span
+                            class="detail">9896 / 11889</span> <span class="task-score icon "></span>
+                </ul>
+                <h2>Dynamic Programming</h2>
+                <ul class="task-list">
+                    <li class="task"><a href="/problemset/task/1633">Dice Combinations</a><span class="detail">70237 /
+                            74444</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1634">Minimizing Coins</a><span class="detail">60679 /
+                            65321</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1635">Coin Combinations I</a><span class="detail">55421 /
+                            60140</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1636">Coin Combinations II</a><span class="detail">46824
+                            / 53218</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1637">Removing Digits</a><span class="detail">52224 /
+                            53346</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1638">Grid Paths I</a><span class="detail">49067 /
+                            50514</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1158">Book Shop</a><span class="detail">43746 /
+                            48347</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1746">Array Description</a><span class="detail">32028 /
+                            35762</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2413">Counting Towers</a><span class="detail">19224 /
+                            20423</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1639">Edit Distance</a><span class="detail">32458 /
+                            34318</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3403">Longest Common Subsequence</a><span
+                            class="detail">4317 / 4501</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1744">Rectangle Cutting</a><span class="detail">26999 /
+                            29519</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3359">Minimal Grid Path</a><span class="detail">1824 /
+                            3587</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1745">Money Sums</a><span class="detail">32065 /
+                            33347</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1097">Removal Game</a><span class="detail">18346 /
+                            25604</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1093">Two Sets II</a><span class="detail">25244 /
+                            27304</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3314">Mountain Range</a><span class="detail">1247 /
+                            2455</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1145">Increasing Subsequence</a><span
+                            class="detail">25863 / 29128</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1140">Projects</a><span class="detail">17742 /
+                            19937</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1653">Elevator Rides</a><span class="detail">11126 /
+                            14153</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2181">Counting Tilings</a><span class="detail">6462 /
+                            7084</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2220">Counting Numbers</a><span class="detail">8685 /
+                            9900</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1748">Increasing Subsequence II</a><span
+                            class="detail">2960 / 3375</span> <span class="task-score icon "></span>
+                </ul>
+                <h2>Graph Algorithms</h2>
+                <ul class="task-list">
+                    <li class="task"><a href="/problemset/task/1192">Counting Rooms</a><span class="detail">48091 /
+                            50665</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1193">Labyrinth</a><span class="detail">33020 /
+                            40003</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1666">Building Roads</a><span class="detail">42060 /
+                            43634</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1667">Message Route</a><span class="detail">35959 /
+                            37478</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1668">Building Teams</a><span class="detail">33979 /
+                            35967</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1669">Round Trip</a><span class="detail">26940 /
+                            29481</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1194">Monsters</a><span class="detail">18064 /
+                            21616</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1671">Shortest Routes I</a><span class="detail">29276 /
+                            32621</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1672">Shortest Routes II</a><span class="detail">23790 /
+                            26879</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1673">High Score</a><span class="detail">14079 /
+                            20577</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1195">Flight Discount</a><span class="detail">18555 /
+                            21962</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1197">Cycle Finding</a><span class="detail">13129 /
+                            16356</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1196">Flight Routes</a><span class="detail">12719 /
+                            14273</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1678">Round Trip II</a><span class="detail">14681 /
+                            16622</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1679">Course Schedule</a><span class="detail">19409 /
+                            20632</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1680">Longest Flight Route</a><span class="detail">13316
+                            / 16914</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1681">Game Routes</a><span class="detail">15170 /
+                            16367</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1202">Investigation</a><span class="detail">11197 /
+                            12092</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1750">Planets Queries I</a><span class="detail">9667 /
+                            11435</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1160">Planets Queries II</a><span class="detail">3459 /
+                            4400</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1751">Planets Cycles</a><span class="detail">5973 /
+                            6704</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1675">Road Reparation</a><span class="detail">14827 /
+                            15488</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1676">Road Construction</a><span class="detail">16108 /
+                            16651</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1682">Flight Routes Check</a><span class="detail">13195 /
+                            14381</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1683">Planets and Kingdoms</a><span class="detail">10567
+                            / 10960</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1684">Giant Pizza</a><span class="detail">4316 /
+                            4776</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1686">Coin Collector</a><span class="detail">6757 /
+                            7567</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1691">Mail Delivery</a><span class="detail">5717 /
+                            6287</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1692">De Bruijn Sequence</a><span class="detail">2979 /
+                            3125</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1693">Teleporters Path</a><span class="detail">4289 /
+                            4985</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1690">Hamiltonian Flights</a><span class="detail">6492 /
+                            7448</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1689">Knight's Tour</a><span class="detail">2424 /
+                            2962</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1694">Download Speed</a><span class="detail">4263 /
+                            5871</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1695">Police Chase</a><span class="detail">3421 /
+                            3876</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1696">School Dance</a><span class="detail">3783 /
+                            4021</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1711">Distinct Routes</a><span class="detail">2586 /
+                            3423</span> <span class="task-score icon "></span>
+                </ul>
+                <h2>Range Queries</h2>
+                <ul class="task-list">
+                    <li class="task"><a href="/problemset/task/1646">Static Range Sum Queries</a><span
+                            class="detail">33123 / 34644</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1647">Static Range Minimum Queries</a><span
+                            class="detail">23397 / 25103</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1648">Dynamic Range Sum Queries</a><span
+                            class="detail">24299 / 25423</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1649">Dynamic Range Minimum Queries</a><span
+                            class="detail">22092 / 22637</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1650">Range Xor Queries</a><span class="detail">22861 /
+                            23183</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1651">Range Update Queries</a><span class="detail">17982
+                            / 19358</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1652">Forest Queries</a><span class="detail">18396 /
+                            19125</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1143">Hotel Queries</a><span class="detail">12934 /
+                            13810</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1749">List Removals</a><span class="detail">10768 /
+                            11375</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1144">Salary Queries</a><span class="detail">7857 /
+                            10095</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2166">Prefix Sum Queries</a><span class="detail">6764 /
+                            7375</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2206">Pizzeria Queries</a><span class="detail">5452 /
+                            5676</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3304">Visible Buildings Queries</a><span
+                            class="detail">718 / 790</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3163">Range Interval Queries</a><span class="detail">573
+                            / 756</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1190">Subarray Sum Queries</a><span class="detail">6688 /
+                            7301</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3226">Subarray Sum Queries II</a><span class="detail">783
+                            / 809</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1734">Distinct Values Queries</a><span
+                            class="detail">6048 / 7597</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3356">Distinct Values Queries II</a><span
+                            class="detail">447 / 520</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2416">Increasing Array Queries</a><span
+                            class="detail">2343 / 2698</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1664">Movie Festival Queries</a><span class="detail">1050
+                            / 1173</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1739">Forest Queries II</a><span class="detail">4032 /
+                            4356</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1735">Range Updates and Sums</a><span class="detail">5262
+                            / 6331</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1736">Polynomial Queries</a><span class="detail">3898 /
+                            4596</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1737">Range Queries and Copies</a><span
+                            class="detail">2789 / 3007</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2184">Missing Coin Sum Queries</a><span
+                            class="detail">485 / 659</span> <span class="task-score icon "></span>
+                </ul>
+                <h2>Tree Algorithms</h2>
+                <ul class="task-list">
+                    <li class="task"><a href="/problemset/task/1674">Subordinates</a><span class="detail">27753 /
+                            29752</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1130">Tree Matching</a><span class="detail">15614 /
+                            18280</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1131">Tree Diameter</a><span class="detail">22582 /
+                            24007</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1132">Tree Distances I</a><span class="detail">17074 /
+                            18425</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1133">Tree Distances II</a><span class="detail">14025 /
+                            14639</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1687">Company Queries I</a><span class="detail">15549 /
+                            16404</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1688">Company Queries II</a><span class="detail">14580 /
+                            15320</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1135">Distance Queries</a><span class="detail">13304 /
+                            14310</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1136">Counting Paths</a><span class="detail">8189 /
+                            8727</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1137">Subtree Queries</a><span class="detail">9925 /
+                            10615</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1138">Path Queries</a><span class="detail">7926 /
+                            8423</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2134">Path Queries II</a><span class="detail">3124 /
+                            4793</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1139">Distinct Colors</a><span class="detail">7619 /
+                            8458</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2079">Finding a Centroid</a><span class="detail">6192 /
+                            6462</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2080">Fixed-Length Paths I</a><span class="detail">2881 /
+                            3784</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2081">Fixed-Length Paths II</a><span class="detail">1334
+                            / 2526</span> <span class="task-score icon "></span>
+                </ul>
+                <h2>Mathematics</h2>
+                <ul class="task-list">
+                    <li class="task"><a href="/problemset/task/2164">Josephus Queries</a><span class="detail">4181 /
+                            5276</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1095">Exponentiation</a><span class="detail">21976 /
+                            23512</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1712">Exponentiation II</a><span class="detail">15608 /
+                            18809</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1713">Counting Divisors</a><span class="detail">19942 /
+                            22575</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1081">Common Divisors</a><span class="detail">13092 /
+                            15320</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1082">Sum of Divisors</a><span class="detail">7236 /
+                            11009</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2182">Divisor Analysis</a><span class="detail">4930 /
+                            6635</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2185">Prime Multiples</a><span class="detail">5587 /
+                            6589</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2417">Counting Coprime Pairs</a><span class="detail">3627
+                            / 4276</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3396">Next Prime</a><span class="detail">863 / 980</span>
+                        <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1079">Binomial Coefficients</a><span class="detail">9151
+                            / 10206</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1715">Creating Strings II</a><span class="detail">7760 /
+                            8227</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1716">Distributing Apples</a><span class="detail">7505 /
+                            8098</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1717">Christmas Party</a><span class="detail">5920 /
+                            6391</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3397">Permutation Order</a><span class="detail">396 /
+                            403</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3398">Permutation Rounds</a><span class="detail">401 /
+                            453</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2064">Bracket Sequences I</a><span class="detail">4100 /
+                            4483</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2187">Bracket Sequences II</a><span class="detail">2129 /
+                            2462</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2209">Counting Necklaces</a><span class="detail">1955 /
+                            2126</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2210">Counting Grids</a><span class="detail">1582 /
+                            1697</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1722">Fibonacci Numbers</a><span class="detail">6419 /
+                            8102</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1096">Throwing Dice</a><span class="detail">3324 /
+                            3626</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1723">Graph Paths I</a><span class="detail">3152 /
+                            3388</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1724">Graph Paths II</a><span class="detail">2635 /
+                            2766</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3154">System of Linear Equations</a><span
+                            class="detail">193 / 212</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3355">Sum of Four Squares</a><span class="detail">320 /
+                            373</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3406">Triangle Number Sums</a><span class="detail">258 /
+                            324</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1725">Dice Probability</a><span class="detail">2858 /
+                            3095</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1726">Moving Robots</a><span class="detail">1455 /
+                            1545</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1727">Candy Lottery</a><span class="detail">1103 /
+                            2656</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1728">Inversion Probability</a><span class="detail">364 /
+                            2044</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1729">Stick Game</a><span class="detail">3171 /
+                            3248</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1730">Nim Game I</a><span class="detail">4188 /
+                            4353</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1098">Nim Game II</a><span class="detail">3325 /
+                            3471</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1099">Stair Game</a><span class="detail">2246 /
+                            2447</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2207">Grundy's Game</a><span class="detail">1520 /
+                            2008</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2208">Another Game</a><span class="detail">1741 /
+                            1883</span> <span class="task-score icon "></span>
+                </ul>
+                <h2>String Algorithms</h2>
+                <ul class="task-list">
+                    <li class="task"><a href="/problemset/task/1731">Word Combinations</a><span class="detail">5207 /
+                            7668</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1753">String Matching</a><span class="detail">10292 /
+                            13957</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1732">Finding Borders</a><span class="detail">7515 /
+                            8248</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1733">Finding Periods</a><span class="detail">5335 /
+                            6078</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1110">Minimal Rotation</a><span class="detail">2570 /
+                            4012</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1111">Longest Palindrome</a><span class="detail">3932 /
+                            5245</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3138">All Palindromes</a><span class="detail">280 /
+                            314</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1112">Required Substring</a><span class="detail">1466 /
+                            2295</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2420">Palindrome Queries</a><span class="detail">1861 /
+                            2182</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2102">Finding Patterns</a><span class="detail">1695 /
+                            2443</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2103">Counting Patterns</a><span class="detail">1597 /
+                            2001</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2104">Pattern Positions</a><span class="detail">1340 /
+                            1652</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2105">Distinct Substrings</a><span class="detail">1534 /
+                            1842</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1149">Distinct Subsequences</a><span class="detail">934 /
+                            1000</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2106">Repeating Substring</a><span class="detail">1651 /
+                            1952</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2107">String Functions</a><span class="detail">1465 /
+                            1538</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3225">Inverse Suffix Array</a><span class="detail">102 /
+                            115</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1113">String Transform</a><span class="detail">460 /
+                            567</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2108">Substring Order I</a><span class="detail">1044 /
+                            1180</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2109">Substring Order II</a><span class="detail">692 /
+                            895</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2110">Substring Distribution</a><span class="detail">968
+                            / 1059</span> <span class="task-score icon "></span>
+                </ul>
+                <h2>Geometry</h2>
+                <ul class="task-list">
+                    <li class="task"><a href="/problemset/task/2189">Point Location Test</a><span class="detail">6578 /
+                            7377</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2190">Line Segment Intersection</a><span
+                            class="detail">3934 / 4988</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2191">Polygon Area</a><span class="detail">4578 /
+                            4868</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2192">Point in Polygon</a><span class="detail">2481 /
+                            3180</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2193">Polygon Lattice Points</a><span class="detail">2120
+                            / 2201</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2194">Minimum Euclidean Distance</a><span
+                            class="detail">1839 / 2580</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2195">Convex Hull</a><span class="detail">3049 /
+                            3657</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3410">Maximum Manhattan Distances</a><span
+                            class="detail">280 / 286</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3411">All Manhattan Distances</a><span class="detail">289
+                            / 317</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1740">Intersection Points</a><span class="detail">1761 /
+                            1899</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3427">Line Segments Trace I</a><span class="detail">157 /
+                            161</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3428">Line Segments Trace II</a><span class="detail">115
+                            / 123</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3429">Lines and Queries I</a><span class="detail">167 /
+                            177</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3430">Lines and Queries II</a><span class="detail">137 /
+                            143</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1741">Area of Rectangles</a><span class="detail">993 /
+                            1111</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1742">Robot Path</a><span class="detail">267 / 471</span>
+                        <span class="task-score icon "></span>
+                </ul>
+                <h2>Advanced Techniques</h2>
+                <ul class="task-list">
+                    <li class="task"><a href="/problemset/task/1628">Meet in the Middle</a><span class="detail">6024 /
+                            8552</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2136">Hamming Distance</a><span class="detail">2971 /
+                            3236</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3360">Corner Subgrid Check</a><span class="detail">177 /
+                            250</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2137">Corner Subgrid Count</a><span class="detail">2090 /
+                            2342</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2138">Reachable Nodes</a><span class="detail">2054 /
+                            2219</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2143">Reachability Queries</a><span class="detail">1373 /
+                            1632</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2072">Cut and Paste</a><span class="detail">1365 /
+                            1525</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2073">Substring Reversals</a><span class="detail">1189 /
+                            1302</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2074">Reversals and Sums</a><span class="detail">1197 /
+                            1299</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2076">Necessary Roads</a><span class="detail">1740 /
+                            1784</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2077">Necessary Cities</a><span class="detail">1619 /
+                            1704</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2078">Eulerian Subgraphs</a><span class="detail">719 /
+                            759</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2084">Monster Game I</a><span class="detail">1044 /
+                            1158</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2085">Monster Game II</a><span class="detail">926 /
+                            999</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2086">Subarray Squares</a><span class="detail">1212 /
+                            1451</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2087">Houses and Schools</a><span class="detail">681 /
+                            821</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2088">Knuth Division</a><span class="detail">811 /
+                            927</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2111">Apples and Bananas</a><span class="detail">882 /
+                            965</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2112">One Bit Positions</a><span class="detail">728 /
+                            803</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2113">Signal Processing</a><span class="detail">667 /
+                            723</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2101">New Roads Queries</a><span class="detail">1941 /
+                            2385</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2133">Dynamic Connectivity</a><span class="detail">871 /
+                            991</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2121">Parcel Delivery</a><span class="detail">655 /
+                            736</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2129">Task Assignment</a><span class="detail">756 /
+                            808</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2130">Distinct Routes II</a><span class="detail">504 /
+                            584</span> <span class="task-score icon "></span>
+                </ul>
+                <h2>Sliding Window Problems</h2>
+                <ul class="task-list">
+                    <li class="task"><a href="/problemset/task/3220">Sliding Window Sum</a><span class="detail">2088 /
+                            2193</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3221">Sliding Window Minimum</a><span class="detail">1621
+                            / 1863</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3426">Sliding Window Xor</a><span class="detail">1628 /
+                            1642</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3405">Sliding Window Or</a><span class="detail">692 /
+                            1270</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3222">Sliding Window Distinct Values</a><span
+                            class="detail">1326 / 1343</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3224">Sliding Window Mode</a><span class="detail">975 /
+                            1019</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3219">Sliding Window Mex</a><span class="detail">877 /
+                            925</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1076">Sliding Window Median</a><span class="detail">12659
+                            / 14499</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1077">Sliding Window Cost</a><span class="detail">8448 /
+                            9758</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3223">Sliding Window Inversions</a><span
+                            class="detail">522 / 555</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3227">Sliding Window Advertisement</a><span
+                            class="detail">94 / 155</span> <span class="task-score icon "></span>
+                </ul>
+                <h2>Interactive Problems</h2>
+                <ul class="task-list">
+                    <li class="task"><a href="/problemset/task/3112">Hidden Integer</a><span class="detail">977 /
+                            1003</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3139">Hidden Permutation</a><span class="detail">449 /
+                            540</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3305">K-th Highest Score</a><span class="detail">175 /
+                            218</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3228">Permuted Binary Strings</a><span class="detail">252
+                            / 261</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3273">Colored Chairs</a><span class="detail">215 /
+                            226</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3140">Inversion Sorting</a><span class="detail">127 /
+                            135</span> <span class="task-score icon "></span>
+                </ul>
+                <h2>Bitwise Operations</h2>
+                <ul class="task-list">
+                    <li class="task"><a href="/problemset/task/1146">Counting Bits</a><span class="detail">3816 /
+                            4879</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1655">Maximum Xor Subarray</a><span class="detail">2361 /
+                            2623</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3191">Maximum Xor Subset</a><span class="detail">381 /
+                            420</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3211">Number of Subset Xors</a><span class="detail">348 /
+                            358</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3192">K Subset Xors</a><span class="detail">174 /
+                            207</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3233">All Subarray Xors</a><span class="detail">134 /
+                            197</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2419">Xor Pyramid Peak</a><span class="detail">1657 /
+                            2042</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3194">Xor Pyramid Diagonal</a><span class="detail">146 /
+                            169</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3195">Xor Pyramid Row</a><span class="detail">118 /
+                            136</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1654">SOS Bit Problem</a><span class="detail">1678 /
+                            1799</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3141">And Subset Count</a><span class="detail">176 /
+                            181</span> <span class="task-score icon "></span>
+                </ul>
+                <h2>Construction Problems</h2>
+                <ul class="task-list">
+                    <li class="task"><a href="/problemset/task/2214">Inverse Inversions</a><span class="detail">1156 /
+                            1224</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2215">Monotone Subsequences</a><span class="detail">711 /
+                            830</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3422">Third Permutation</a><span class="detail">181 /
+                            213</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3423">Permutation Prime Sums</a><span class="detail">183
+                            / 195</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1697">Chess Tournament</a><span class="detail">1020 /
+                            1179</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3424">Distinct Sums Grid</a><span class="detail">55 /
+                            89</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2423">Filling Trominos</a><span class="detail">212 /
+                            360</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2418">Grid Path Construction</a><span class="detail">106
+                            / 401</span> <span class="task-score icon "></span>
+                </ul>
+                <h2>Advanced Graph Problems</h2>
+                <ul class="task-list">
+                    <li class="task"><a href="/problemset/task/3303">Nearest Shops</a><span class="detail">317 /
+                            423</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1134">Prüfer Code</a><span class="detail">1319 /
+                            1433</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1702">Tree Traversals</a><span class="detail">1031 /
+                            1143</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1757">Course Schedule II</a><span class="detail">1600 /
+                            2304</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1756">Acyclic Graph Edges</a><span class="detail">1968 /
+                            2091</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2177">Strongly Connected Edges</a><span
+                            class="detail">1338 / 1487</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2179">Even Outdegree Edges</a><span class="detail">1173 /
+                            1380</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1707">Graph Girth</a><span class="detail">2953 /
+                            3394</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3357">Fixed Length Walk Queries</a><span
+                            class="detail">183 / 194</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3111">Transfer Speeds Sum</a><span class="detail">189 /
+                            195</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3407">MST Edge Check</a><span class="detail">250 /
+                            267</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3408">MST Edge Set Check</a><span class="detail">109 /
+                            119</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3409">MST Edge Cost</a><span class="detail">177 /
+                            186</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1677">Network Breakdown</a><span class="detail">864 /
+                            916</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3114">Tree Coin Collecting I</a><span class="detail">151
+                            / 162</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3149">Tree Coin Collecting II</a><span class="detail">82
+                            / 93</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1700">Tree Isomorphism I</a><span class="detail">994 /
+                            1142</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1701">Tree Isomorphism II</a><span class="detail">789 /
+                            909</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1699">Flight Route Requests</a><span class="detail">414 /
+                            501</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1703">Critical Cities</a><span class="detail">363 /
+                            550</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1203">Visiting Cities</a><span class="detail">595 /
+                            794</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3308">Graph Coloring</a><span class="detail">99 /
+                            120</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3158">Bus Companies</a><span class="detail">119 /
+                            122</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3358">Split into Two Paths</a><span class="detail">51 /
+                            82</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1704">Network Renovation</a><span class="detail">846 /
+                            1122</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1705">Forbidden Cities</a><span class="detail">709 /
+                            937</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1752">Creating Offices</a><span class="detail">370 /
+                            480</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1685">New Flight Routes</a><span class="detail">276 /
+                            733</span> <span class="task-score icon "></span>
+                </ul>
+                <h2>Counting Problems</h2>
+                <ul class="task-list">
+                    <li class="task"><a href="/problemset/task/3413">Filled Subgrid Count I</a><span class="detail">236
+                            / 266</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3414">Filled Subgrid Count II</a><span class="detail">116
+                            / 141</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3415">All Letter Subgrid Count I</a><span
+                            class="detail">64 / 103</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3416">All Letter Subgrid Count II</a><span
+                            class="detail">55 / 62</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3417">Border Subgrid Count I</a><span class="detail">43 /
+                            82</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3418">Border Subgrid Count II</a><span class="detail">52
+                            / 58</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3400">Raab Game II</a><span class="detail">49 / 58</span>
+                        <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1080">Empty String</a><span class="detail">1405 /
+                            1717</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2229">Permutation Inversions</a><span class="detail">899
+                            / 990</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2176">Counting Bishops</a><span class="detail">333 /
+                            374</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2228">Counting Sequences</a><span class="detail">561 /
+                            607</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1078">Grid Paths II</a><span class="detail">670 /
+                            837</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1075">Counting Permutations</a><span class="detail">786 /
+                            894</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2429">Grid Completion</a><span class="detail">188 /
+                            241</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2421">Counting Reorders</a><span class="detail">194 /
+                            288</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3232">Tournament Graph Distribution</a><span
+                            class="detail">47 / 49</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3157">Collecting Numbers Distribution</a><span
+                            class="detail">52 / 54</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2415">Functional Graph Distribution</a><span
+                            class="detail">208 / 260</span> <span class="task-score icon "></span>
+                </ul>
+                <h2>Additional Problems I</h2>
+                <ul class="task-list">
+                    <li class="task"><a href="/problemset/task/1087">Shortest Subsequence</a><span class="detail">2742 /
+                            3641</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3150">Distinct Values Sum</a><span class="detail">280 /
+                            290</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3190">Distinct Values Splits</a><span class="detail">205
+                            / 216</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1670">Swap Game</a><span class="detail">1848 /
+                            2350</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3175">Beautiful Permutation II</a><span
+                            class="detail">117 / 163</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2422">Multiplication Table</a><span class="detail">5761 /
+                            6453</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3151">Bubble Sort Rounds I</a><span class="detail">148 /
+                            166</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3152">Bubble Sort Rounds II</a><span class="detail">74 /
+                            81</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3306">Nearest Campsites I</a><span class="detail">70 /
+                            82</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3307">Nearest Campsites II</a><span class="detail">66 /
+                            74</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1142">Advertisement</a><span class="detail">3838 /
+                            4071</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2186">Special Substrings</a><span class="detail">881 /
+                            966</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3169">Counting LCM Arrays</a><span class="detail">119 /
+                            129</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3193">Square Subsets</a><span class="detail">105 /
+                            119</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3294">Subarray Sum Constraints</a><span class="detail">83
+                            / 93</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3213">Water Containers Moves</a><span class="detail">70 /
+                            72</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3214">Water Containers Queries</a><span class="detail">88
+                            / 90</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2425">Stack Weights</a><span class="detail">519 /
+                            613</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3301">Maximum Average Subarrays</a><span
+                            class="detail">66 / 73</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3302">Subsets with Fixed Average</a><span
+                            class="detail">91 / 100</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3361">Two Array Average</a><span class="detail">84 /
+                            99</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1747">Pyramid Array</a><span class="detail">643 /
+                            779</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3404">Permutation Subsequence</a><span class="detail">111
+                            / 113</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1188">Bit Inversions</a><span class="detail">2090 /
+                            2396</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1086">Writing Numbers</a><span class="detail">669 /
+                            726</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2427">Letter Pair Move Game</a><span class="detail">174 /
+                            251</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1147">Maximum Building I</a><span class="detail">1877 /
+                            1962</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1162">Sorting Methods</a><span class="detail">708 /
+                            758</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1191">Cyclic Array</a><span class="detail">1026 /
+                            1172</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2414">List of Sums</a><span class="detail">416 /
+                            547</span> <span class="task-score icon "></span>
+                </ul>
+                <h2>Additional Problems II</h2>
+                <ul class="task-list">
+                    <li class="task"><a href="/problemset/task/3215">Bouncing Ball Steps</a><span class="detail">100 /
+                            109</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3216">Bouncing Ball Cycle</a><span class="detail">41 /
+                            57</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3218">Knight Moves Queries</a><span class="detail">70 /
+                            82</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3108">K Subset Sums I</a><span class="detail">78 /
+                            109</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3109">K Subset Sums II</a><span class="detail">47 /
+                            56</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2132">Increasing Array II</a><span class="detail">722 /
+                            832</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1189">Food Division</a><span class="detail">476 /
+                            565</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1698">Swap Round Sorting</a><span class="detail">379 /
+                            468</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2430">Binary Subsequences</a><span class="detail">254 /
+                            381</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1706">School Excursion</a><span class="detail">1218 /
+                            1297</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1709">Coin Grid</a><span class="detail">740 / 877</span>
+                        <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3312">Grid Coloring II</a><span class="detail">70 /
+                            88</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2426">Programmers and Artists</a><span class="detail">460
+                            / 603</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2174">Removing Digits II</a><span class="detail">188 /
+                            429</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2180">Coin Arrangement</a><span class="detail">284 /
+                            389</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3159">Replace with Difference</a><span class="detail">53
+                            / 66</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2432">Grid Puzzle I</a><span class="detail">458 /
+                            504</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2131">Grid Puzzle II</a><span class="detail">401 /
+                            443</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2115">Bit Substrings</a><span class="detail">329 /
+                            405</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2075">Reversal Sorting</a><span class="detail">311 /
+                            381</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1159">Book Shop II</a><span class="detail">1019 /
+                            1181</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3161">GCD Subsets</a><span class="detail">199 /
+                            205</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3402">Minimum Cost Pairs</a><span class="detail">47 /
+                            64</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3425">Same Sum Subsets</a><span class="detail">57 /
+                            87</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1157">Mex Grid Queries</a><span class="detail">758 /
+                            898</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1148">Maximum Building II</a><span class="detail">382 /
+                            474</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1161">Stick Divisions</a><span class="detail">3457 /
+                            4066</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/3401">Stick Difference</a><span class="detail">16 /
+                            94</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/1665">Coding Company</a><span class="detail">1289 /
+                            1704</span> <span class="task-score icon "></span>
+                    <li class="task"><a href="/problemset/task/2402">Two Stacks Sorting</a><span class="detail">147 /
+                            456</span> <span class="task-score icon "></span>
+                </ul>
+                <table></table>
+                <table></table>
+                <table style="display: none;">
+                    <tr>
+                        <td><a><!-- See https://github.com/cheran-senthil/TLE/issues/294 --></a></td>
+                    </tr>
+                </table>
+            </div>
+</body>
+
+</html>
