@@ -108,13 +108,18 @@
     if (el) el.textContent = msg;
   }
 
-  /** Fetch last submission date for a problem id (string). Respects cache. */
-  async function getLastSubmissionDate(problemId) {
+  /** Fetch submission metadata for a problem id. Caches:
+   *  - ISO timestamp (assumes first timestamp is latest) if any submission exists
+   *  - 'NONE' if no submissions
+   * Returns { date: Date|null, attempted: boolean }
+   */
+  async function getSubmissionMeta(problemId) {
     const cacheKey = CACHE_PREFIX + problemId;
     const cached = localStorage.getItem(cacheKey);
     if (cached) {
+      if (cached === 'NONE') return { date: null, attempted: false };
       const d = new Date(cached);
-      if (!isNaN(d.getTime())) return d;
+      if (!isNaN(d.getTime())) return { date: d, attempted: true };
     }
     try {
       const url = `https://cses.fi/problemset/submit/${problemId}/`;
@@ -124,16 +129,20 @@
       const date = extractLatestSubmissionDate(text);
       if (date) {
         localStorage.setItem(cacheKey, date.toISOString());
-        return date;
+        return { date, attempted: true };
+      } else {
+        localStorage.setItem(cacheKey, 'NONE');
+        return { date: null, attempted: false };
       }
-      // If we cannot parse, set a sentinel far past to avoid hiding incorrectly.
-      const sentinel = new Date();
-      localStorage.setItem(cacheKey, sentinel.toISOString());
-      return sentinel;
     } catch (e) {
       console.error('Failed to fetch submissions for', problemId, e);
-      return null;
+      return { date: null, attempted: false };
     }
+  }
+
+  async function getLastSubmissionDate(problemId) {
+    const meta = await getSubmissionMeta(problemId);
+    return meta.date;
   }
 
   /** Queue with limited concurrency */
@@ -163,14 +172,16 @@
     dateInput.addEventListener('change', () => {
       localStorage.setItem(THRESHOLD_DATE_KEY, dateInput.value);
       applyFilter();
+      buildSectionStats();
     });
 
     panel.querySelector('#cses-clear-cache').addEventListener('click', () => {
       if (!confirm('Clear cached submission timestamps?')) return;
       let cleared = 0;
       Object.keys(localStorage).forEach(k => { if (k.startsWith(CACHE_PREFIX)) { localStorage.removeItem(k); cleared++; } });
-      setStatus(`Cleared ${cleared} cached entries.`);
-      applyFilter(true); // force refetch
+  setStatus(`Cleared ${cleared} cached entries.`);
+  applyFilter(true); // force refetch
+  buildSectionStats();
     });
 
     // Alt+Click on a solved icon to refresh just that problem
@@ -183,12 +194,14 @@
         if (problemId) {
           localStorage.removeItem(CACHE_PREFIX + problemId);
           setStatus(`Cleared cache for problem ${problemId}`);
-          applyFilter(true);
+      applyFilter(true);
+      buildSectionStats();
         }
       }
     });
 
     applyFilter();
+    buildSectionStats();
   }
 
   /** Collect solved icons (including ones we previously hid).
@@ -214,10 +227,77 @@
   }
 
   function extractProblemTitle(icon) {
-    const row = icon.closest('tr');
-    if (!row) return 'Unknown';
-    const link = row.querySelector('a[href*="/problemset/task/"]');
+    const li = icon.closest('li.task');
+    if (!li) return 'Unknown';
+    const link = li.querySelector('a[href*="/problemset/task/"]');
     return (link && link.textContent && link.textContent.trim()) || 'Unknown';
+  }
+
+  /**************** Section statistics: [total / correct / wrong / unattended] ***************/
+  const sectionQueue = new TaskQueue(2);
+
+  function findSections() {
+    return Array.from(document.querySelectorAll('h2')).map(h => ({
+      heading: h,
+      list: h.nextElementSibling && h.nextElementSibling.matches('ul.task-list') ? h.nextElementSibling : null
+    })).filter(s => s.list);
+  }
+
+  function classifyTask(li) {
+    const icon = li.querySelector('span.task-score.icon');
+    const solved = icon && icon.classList.contains('full');
+    const wrongImmediate = icon && icon.classList.contains('zero'); // known wrong submission indicator
+    const link = li.querySelector('a[href*="/problemset/task/"]');
+    const problemId = link ? (link.getAttribute('href') || '').match(/(\d+)/)?.[1] : null;
+    if (!problemId) return { solved: false, attempted: false, unattended: true, pending: false };
+    if (solved) return { solved: true, attempted: true, unattended: false, pending: false, problemId };
+    if (wrongImmediate) return { solved: false, attempted: true, unattended: false, pending: false, problemId };
+    const cacheVal = localStorage.getItem(CACHE_PREFIX + problemId);
+    if (cacheVal) {
+      if (cacheVal === 'NONE') return { solved: false, attempted: false, unattended: true, pending: false, problemId };
+      const d = new Date(cacheVal);
+      if (!isNaN(d.getTime())) return { solved: false, attempted: true, unattended: false, pending: false, problemId };
+    }
+    return { solved: false, attempted: false, unattended: true, pending: true, problemId };
+  }
+
+  function updateSectionHeading(section) {
+    const { heading, list } = section;
+    const tasks = Array.from(list.querySelectorAll('li.task'));
+    let total = tasks.length, correct = 0, wrong = 0, unattended = 0;
+    tasks.forEach(li => {
+      const c = classifyTask(li);
+      if (c.solved) correct++; else if (c.attempted) wrong++; else unattended++;
+    });
+    const label = `[${total} / ${correct} / ${wrong} / ${unattended}]`;
+    const base = heading.getAttribute('data-base-text') || heading.textContent.trim();
+    heading.setAttribute('data-base-text', base);
+    let badge = heading.querySelector(':scope > .cses-section-stats');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'cses-section-stats';
+      badge.style.cssText = 'margin-right:6px;font-weight:normal;font-size:0.75em;color:#888;';
+      heading.prepend(badge);
+    }
+    badge.textContent = label + ' ';
+  }
+
+  function buildSectionStats() {
+    const sections = findSections();
+    sections.forEach(section => {
+      updateSectionHeading(section); // initial (fast)
+      // queue fetches for pending unsolved tasks
+      const tasks = Array.from(section.list.querySelectorAll('li.task'));
+      tasks.forEach(li => {
+        const c = classifyTask(li);
+        if (c.pending && c.problemId) {
+          sectionQueue.push(async () => {
+            await getSubmissionMeta(c.problemId);
+            updateSectionHeading(section);
+          });
+        }
+      });
+    });
   }
 
   /** Apply filter logic; if forceRefetch true we ignore cache presence (by deleting entries first) */
