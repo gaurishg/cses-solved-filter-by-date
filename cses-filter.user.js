@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name         CSES Solved Filter by Date
 // @namespace    https://cses.fi/
-// @version      0.1.0
-// @description  Hide solved check marks for problems whose last submission is before a selected date.
+// @version      0.1.1
+// @description  Hide solved check marks (list & task pages) for problems whose last submission is before a selected date.
 // @author       (you)
 // @match        https://cses.fi/problemset/list
 // @match        https://cses.fi/problemset/list/
 // @match        https://cses.fi/problemset/list/*
+// @match        https://cses.fi/problemset/task/*
 // @icon         https://cses.fi/favicon.ico
 // @run-at       document-end
 // @grant        none
@@ -161,8 +162,9 @@
 
   /** Main logic */
   async function init() {
-    // Only run on problem list page path
-    if (!/\/problemset\/list\/?/.test(location.pathname)) return;
+  // Run on problem list and individual task pages (sidebar mini list present)
+  const path = location.pathname;
+  if (!/\/problemset\/(list|task)/.test(path)) return; // only run where either the full list or a task (with sidebar mini list) is present
     const panel = createUI();
     const dateInput = /** @type {HTMLInputElement} */ (panel.querySelector('#cses-threshold-date'));
     // Load saved threshold date or default to today
@@ -210,7 +212,7 @@
    * even after removing the 'full' class.
    */
   function collectSolved() {
-    const nodes = Array.from(document.querySelectorAll('span.task-score.icon'));
+  const nodes = Array.from(document.querySelectorAll('span.task-score.icon'));
     // Mark any currently solved icons as originally solved.
     nodes.forEach(n => { if (n.classList.contains('full')) n.dataset.originalSolved = '1'; });
     return nodes.filter(n => n.dataset.originalSolved === '1');
@@ -218,9 +220,16 @@
 
   /** Extract problem id from surrounding list item (li.task) */
   function extractProblemId(el) {
+    // Primary structure (list page): span inside li.task containing an <a>
+    let link = null;
     const li = el.closest('li.task');
-    if (!li) return null;
-    const link = li.querySelector('a[href*="/problemset/task/"]');
+    if (li) {
+      link = li.querySelector('a[href*="/problemset/task/"]');
+    }
+    // Task page sidebar: span directly inside <a href="/problemset/task/<id>">
+    if (!link) {
+      link = el.closest('a[href*="/problemset/task/"]');
+    }
     if (!link) return null;
     const href = link.getAttribute('href') || '';
     const m = /\/problemset\/task\/(\d+)/.exec(href);
@@ -228,10 +237,11 @@
   }
 
   function extractProblemTitle(icon) {
+    let link = null;
     const li = icon.closest('li.task');
-    if (!li) return 'Unknown';
-    const link = li.querySelector('a[href*="/problemset/task/"]');
-    return (link && link.textContent && link.textContent.trim()) || 'Unknown';
+    if (li) link = li.querySelector('a[href*="/problemset/task/"]');
+    if (!link) link = icon.closest('a[href*="/problemset/task/"]');
+    return (link && link.childNodes && Array.from(link.childNodes).filter(n=>n.nodeType===3).map(n=>n.textContent).join('').trim()) || 'Unknown';
   }
 
   /**************** Section statistics: [total / correct / wrong / unattended] ***************/
@@ -285,6 +295,8 @@
   }
 
   function buildSectionStats() {
+  // Skip section stats on task pages (sidebar mini list has no h2 structure)
+  if (/\/problemset\/task\//.test(location.pathname)) return;
     const sections = findSections();
     sections.forEach(section => {
       updateSectionHeading(section); // initial (fast)
@@ -306,6 +318,7 @@
 
   /** Compute filtered stats (post date filter) and display to right of heading */
   function updateFilteredSectionStats() {
+  if (/\/problemset\/task\//.test(location.pathname)) return; // no section headings on task page
     const threshold = getThresholdDate();
     const sections = findSections();
     let aggTotal=0, aggSolved=0, aggWrong=0, aggUnatt=0, aggFilteredSolved=0, aggFilteredWrong=0, aggFilteredUnatt=0;
@@ -379,8 +392,8 @@
 
   /** Apply filter logic; if forceRefetch true we ignore cache presence (by deleting entries first) */
   function applyFilter(forceRefetch = false) {
-    const threshold = getThresholdDate();
-    if (!threshold) return;
+  const threshold = getThresholdDate();
+  if (!threshold) return;
   const todayMidnight = new Date(); todayMidnight.setHours(0,0,0,0);
 
     const solvedIcons = collectSolved();
