@@ -10,6 +10,7 @@
 // @icon         https://cses.fi/favicon.ico
 // @run-at       document-end
 // @grant        none
+// @license      MIT
 // ==/UserScript==
 
 /**
