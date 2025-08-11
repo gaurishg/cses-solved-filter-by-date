@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CSES Solved Filter by Date
 // @namespace    https://cses.fi/
-// @version      0.1.2
+// @version      0.1.3
 // @description  Hide solved check marks (list & task pages) for problems whose last submission is before a selected date.
 // @author       (you)
 // @match        https://cses.fi/problemset/list
