@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         CSES Solved Filter by Date
 // @namespace    https://cses.fi/
-// @version      0.1.3
+// @version      0.1.4
 // @description  Hide solved check marks (list & task pages) for problems whose last submission is before a selected date.
-// @author       (you)
+// @author       Gaurish Gangwar
 // @match        https://cses.fi/problemset/list
 // @match        https://cses.fi/problemset/list/
 // @match        https://cses.fi/problemset/list/*
@@ -173,6 +173,33 @@
     return meta.date;
   }
 
+  /** Refresh only one problem's cached metadata and visibility.
+   * @param {string} problemId
+   * @param {HTMLElement} icon span.task-score.icon element (solved or not) if available
+   * @param {boolean} forceRefetch remove cached value first
+   */
+  async function refreshProblem(problemId, icon, forceRefetch=false) {
+    if (forceRefetch) localStorage.removeItem(CACHE_PREFIX + problemId);
+    // fetch metadata (populates cache)
+    const date = await getLastSubmissionDate(problemId);
+    // Decide visibility relative to threshold
+    const threshold = getThresholdDate();
+    if (icon) {
+      // Ensure originalSolved marker if it has ever been solved
+      if (icon.classList.contains('full')) icon.dataset.originalSolved = '1';
+      if (date && threshold && date < threshold) {
+        // hide historical solved
+        if (icon.classList.contains('full')) icon.classList.remove('full');
+        icon.title = `Hidden (old solve): last submission ${date.toLocaleString()}`;
+      } else if (date) {
+        if (!icon.classList.contains('full')) icon.classList.add('full');
+        icon.title = `Last submission ${date.toLocaleString()}`;
+      }
+    }
+    // Update filtered stats if on list page
+    if (/\/problemset\/list\/?/.test(location.pathname)) updateFilteredSectionStats();
+  }
+
   /** Queue with limited concurrency */
   class TaskQueue {
     constructor(concurrency = 3) { this.c = concurrency; this.running = 0; this.q = []; }
@@ -204,7 +231,7 @@
       buildSectionStats();
     });
 
-    panel.querySelector('#cses-clear-cache').addEventListener('click', () => {
+  panel.querySelector('#cses-clear-cache').addEventListener('click', () => {
       if (!confirm('Clear cached submission timestamps?')) return;
       let cleared = 0;
       Object.keys(localStorage).forEach(k => { if (k.startsWith(CACHE_PREFIX)) { localStorage.removeItem(k); cleared++; } });
@@ -219,15 +246,47 @@
       const target = e.target;
       if (!(target instanceof HTMLElement)) return;
       if (target.classList.contains('task-score')) {
-        const problemId = target.getAttribute('data-problem-id');
+        // Determine problem id (may not yet be cached on task pages until initial pass)
+        const problemId = target.getAttribute('data-problem-id') || extractProblemId(target);
         if (problemId) {
-          localStorage.removeItem(CACHE_PREFIX + problemId);
-          setStatus(`Cleared cache for problem ${problemId}`);
-      applyFilter(true);
-      buildSectionStats();
+          setStatus(`Refreshing problem ${problemId}...`);
+          refreshProblem(problemId, target, true).then(()=> setStatus(`Refreshed problem ${problemId}.`));
         }
+        e.preventDefault();
+        e.stopPropagation();
       }
     });
+
+    // MutationObserver: detect newly solved icons (class 'full' added) and refresh only that problem's metadata.
+    const mo = new MutationObserver(muts => {
+      muts.forEach(m => {
+        if (m.type === 'attributes' && m.attributeName === 'class') {
+          const el = m.target;
+          if (el instanceof HTMLElement && el.classList.contains('task-score') && el.classList.contains('full')) {
+            // newly solved: refresh its cache
+            const pid = el.getAttribute('data-problem-id') || extractProblemId(el);
+            if (pid) {
+              el.dataset.originalSolved = '1';
+              refreshProblem(pid, el, true);
+            }
+          }
+        } else if (m.addedNodes && m.addedNodes.length) {
+          m.addedNodes.forEach(n => {
+            if (n instanceof HTMLElement) {
+              const icons = n.matches && n.matches('span.task-score.icon.full') ? [n] : Array.from(n.querySelectorAll ? n.querySelectorAll('span.task-score.icon.full') : []);
+              icons.forEach(ic => {
+                const pid = ic.getAttribute('data-problem-id') || extractProblemId(ic);
+                if (pid) {
+                  ic.dataset.originalSolved = '1';
+                  refreshProblem(pid, ic, true);
+                }
+              });
+            }
+          });
+        }
+      });
+    });
+    mo.observe(document.documentElement, { subtree: true, childList: true, attributes: true, attributeFilter: ['class'] });
 
     applyFilter();
     buildSectionStats();
@@ -440,7 +499,7 @@
       console.log(`[CSES Filter][DISCOVER] #${i} classes=`, icon.className, 'outerHTML=', icon.outerHTML);
     });
 
-    solvedIcons.forEach(icon => {
+  solvedIcons.forEach(icon => {
       const problemId = extractProblemId(icon);
       if (!problemId) {
         console.warn('[CSES Filter][NO-ID] Could not find problem id for icon', icon);
@@ -453,7 +512,7 @@
       queue.push(async () => {
         const fetchStart = performance.now();
         console.log(`[CSES Filter][FETCH START] ${title} id=${problemId}`);
-        const date = await getLastSubmissionDate(problemId);
+    const date = await getLastSubmissionDate(problemId);
         const fetchDur = (performance.now() - fetchStart).toFixed(0);
         if (date) {
           fetched++;
