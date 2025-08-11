@@ -1,13 +1,14 @@
 // ==UserScript==
 // @name         CSES Solved Filter by Date
 // @namespace    https://cses.fi/
-// @version      0.1.1
+// @version      0.1.2
 // @description  Hide solved check marks (list & task pages) for problems whose last submission is before a selected date.
 // @author       (you)
 // @match        https://cses.fi/problemset/list
 // @match        https://cses.fi/problemset/list/
 // @match        https://cses.fi/problemset/list/*
 // @match        https://cses.fi/problemset/task/*
+// @match        https://cses.fi/problemset/*
 // @icon         https://cses.fi/favicon.ico
 // @run-at       document-end
 // @grant        none
@@ -164,7 +165,7 @@
   async function init() {
   // Run on problem list and individual task pages (sidebar mini list present)
   const path = location.pathname;
-  if (!/\/problemset\/(list|task)/.test(path)) return; // only run where either the full list or a task (with sidebar mini list) is present
+  if (!/\/problemset\//.test(path)) return; // any problemset page
     const panel = createUI();
     const dateInput = /** @type {HTMLInputElement} */ (panel.querySelector('#cses-threshold-date'));
     // Load saved threshold date or default to today
@@ -296,7 +297,7 @@
 
   function buildSectionStats() {
   // Skip section stats on task pages (sidebar mini list has no h2 structure)
-  if (/\/problemset\/task\//.test(location.pathname)) return;
+  if (!/\/problemset\/list\/?/.test(location.pathname)) return; // only list page has sections
     const sections = findSections();
     sections.forEach(section => {
       updateSectionHeading(section); // initial (fast)
@@ -318,7 +319,7 @@
 
   /** Compute filtered stats (post date filter) and display to right of heading */
   function updateFilteredSectionStats() {
-  if (/\/problemset\/task\//.test(location.pathname)) return; // no section headings on task page
+  if (!/\/problemset\/list\/?/.test(location.pathname)) return; // no section headings except on list page
     const threshold = getThresholdDate();
     const sections = findSections();
     let aggTotal=0, aggSolved=0, aggWrong=0, aggUnatt=0, aggFilteredSolved=0, aggFilteredWrong=0, aggFilteredUnatt=0;
