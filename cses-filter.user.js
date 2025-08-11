@@ -83,17 +83,42 @@
       </label>
       <div id="cses-filter-status" style="margin-top:4px;font:11px system-ui;color:#444;max-width:260px;line-height:1.3;"></div>
     `;
-    Object.assign(panel.style, {
-      position: 'fixed',
-      top: '6px',
-      left: '6px',
-      background: 'rgba(255,255,255,0.9)',
-      border: '1px solid #ccc',
-      padding: '6px 8px',
-      borderRadius: '6px',
-      zIndex: 10000,
-      boxShadow: '0 2px 5px rgba(0,0,0,0.15)'
-    });
+    function isDark() {
+      const dm = document.getElementById('darkmode-enabled');
+      if (dm && dm.textContent && dm.textContent.trim() === 'true') return true;
+      const themeMeta = document.getElementById('theme-color');
+      const c = themeMeta && themeMeta.getAttribute('content');
+      return c && c.toLowerCase() === '#292929';
+    }
+    function applyTheme() {
+      const dark = isDark();
+      if (dark) {
+        Object.assign(panel.style, {
+          position: 'fixed', top: '6px', left: '6px', background: 'rgba(32,32,32,0.92)',
+          border: '1px solid #444', padding: '6px 8px', borderRadius: '6px', zIndex: 10000,
+          boxShadow: '0 2px 6px rgba(0,0,0,0.5)', color: '#eee'
+        });
+        const status = panel.querySelector('#cses-filter-status'); if (status) status.style.color = '#bbb';
+        const input = panel.querySelector('#cses-threshold-date'); if (input) Object.assign(input.style, { background:'#1e1e1e', color:'#eee', border:'1px solid #555' });
+        const btn = panel.querySelector('#cses-clear-cache'); if (btn) Object.assign(btn.style, { background:'#2a2a2a', color:'#ddd', border:'1px solid #555', cursor:'pointer' });
+      } else {
+        Object.assign(panel.style, {
+          position: 'fixed', top: '6px', left: '6px', background: 'rgba(255,255,255,0.9)',
+          border: '1px solid #ccc', padding: '6px 8px', borderRadius: '6px', zIndex: 10000,
+          boxShadow: '0 2px 5px rgba(0,0,0,0.15)', color: '#222'
+        });
+        const status = panel.querySelector('#cses-filter-status'); if (status) status.style.color = '#444';
+        const input = panel.querySelector('#cses-threshold-date'); if (input) Object.assign(input.style, { background:'#fff', color:'#111', border:'1px solid #bbb' });
+        const btn = panel.querySelector('#cses-clear-cache'); if (btn) Object.assign(btn.style, { background:'#f5f5f5', color:'#222', border:'1px solid #bbb', cursor:'pointer' });
+      }
+    }
+    applyTheme();
+    // Observe theme color meta changes (CSES toggles dark mode by replacing theme-color meta)
+    const themeMeta = document.getElementById('theme-color');
+    if (themeMeta) {
+      const observer = new MutationObserver(()=>applyTheme());
+      observer.observe(themeMeta, { attributes:true, attributeFilter:['content'] });
+    }
     document.body.appendChild(panel);
     return panel;
   }

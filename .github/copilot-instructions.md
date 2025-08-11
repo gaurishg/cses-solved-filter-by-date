@@ -5,8 +5,8 @@ instructions
 Goal: Userscript that adds a date picker to CSES problem list and hides solved check marks (class `full`) for problems whose last submission is before the chosen date; also augments each section heading with overall and date-filtered progress stats (total / solved / wrong / unattended) plus an aggregate "General" total. Fetch last submission time from `https://cses.fi/problemset/submit/<problemId>/` and parse the first `YYYY-MM-DD HH:MM:SS` timestamp (assumed latest). Wrong (attempted but unsolved) detection uses the presence of `<span class="task-score icon zero"></span>` or cached metadata indicating any submission attempts without a solve.
 
 Key points:
-1. Scope: Only runs on `https://cses.fi/problemset/list`.
-2. UI Panel (fixed top-left): date `<input>` (defaults to today & persisted), Clear Cache button, status line (progress + filtered summary counts).
+1. Scope: Runs on all `https://cses.fi/problemset/*` pages; section stats only on the main list page, filtering also on task page mini lists.
+2. UI Panel (fixed top-left, auto adaptive dark/light): date `<input>` (defaults to today & persisted), Clear Cache button, status line (progress + filtered summary counts).
 3. Solved hiding: For each original solved icon (`span.task-score.icon.full`), fetch (if not cached) the submission page and parse first timestamp; if strictly before selected date's midnight, remove `full` class (icon visually disappears). Moving date earlier re-adds class from stored original state.
 4. Stats augmentation: Each section heading gains badges: left = overall `total/solved/wrong/unattended`, right = date-filtered counts (where historic solves hidden by filter are treated as unattended). A synthetic "General" heading aggregates all sections.
 5. Wrong detection: Immediate if `span.task-score.icon.zero` present; otherwise inferred via cached metadata noting an attempted (non-solved) submission.

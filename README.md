@@ -1,4 +1,4 @@
-This repository contains a userscript (plain JavaScript, no external deps, no GM_* grants) for Tampermonkey (https://www.tampermonkey.net/) that enhances the CSES Problemset List page (https://cses.fi/problemset/list/).
+This repository contains a userscript (plain JavaScript, no external deps, no GM_* grants) for Tampermonkey (https://www.tampermonkey.net/) that enhances the CSES Problemset pages (list + individual task pages) (https://cses.fi/problemset/...).
 
 Core purpose:
 Provide a date-based view of progress: hide solved check marks for problems whose last submission is before a chosen cutoff date so you can focus on (re)solving more recent material.
@@ -14,11 +14,11 @@ The script parses the first `YYYY-MM-DD HH:MM:SS` timestamp it encounters on the
 ## Installation
 1. Install Tampermonkey (or another compatible userscript manager) in your browser.
 2. Open the `cses-filter.user.js` file in this repository (raw view) and create a new userscript in Tampermonkey by pasting the contents.
-3. Save the script. It will automatically run on `https://cses.fi/problemset/list`.
+3. Save the script. It will automatically run on `https://cses.fi/problemset/*`.
 
 ## Usage
 1. Visit the CSES problem list page.
-2. A compact fixed panel appears top-left with:
+2. A compact fixed panel (auto dark/light theme) appears top-left with:
 	- Date picker (defaults to today, persisted in `localStorage`)
 	- Clear Cache button
 	- Status line with progress (fetching, filtered counts)
@@ -35,7 +35,7 @@ Colors (may depend on your theme, implemented via inline styles):
 - Wrong (at least one wrong submission, not yet solved): orange
 - Unattended: gray
 
-Tooltips on badges clarify whether you are looking at overall or filtered stats.
+Tooltips on badges clarify whether you are looking at overall or filtered stats. The control panel adapts automatically when CSES dark mode is toggled.
 
 ## Caching
 Per-problem metadata is stored in `localStorage`:
