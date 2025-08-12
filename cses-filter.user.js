@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CSES Solved Filter by Date
 // @namespace    https://cses.fi/
-// @version      0.1.4
+// @version      0.1.5
 // @description  Hide solved check marks (list & task pages) for problems whose last submission is before a selected date.
 // @author       Gaurish Gangwar
 // @match        https://cses.fi/problemset/list
@@ -40,6 +40,15 @@
   const CACHE_VERSION_KEY = 'cses:lastSubmission:__version';
   const CACHE_VERSION = 'v1';
   const THRESHOLD_DATE_KEY = 'cses:thresholdDate';
+
+  /** Detect CSES dark mode */
+  function isDarkTheme() {
+    const dm = document.getElementById('darkmode-enabled');
+    if (dm && dm.textContent && dm.textContent.trim() === 'true') return true;
+    const themeMeta = document.getElementById('theme-color');
+    const c = themeMeta && themeMeta.getAttribute('content');
+    return !!(c && c.toLowerCase() === '#292929');
+  }
 
   // Ensure cache version
   if (localStorage.getItem(CACHE_VERSION_KEY) !== CACHE_VERSION) {
@@ -83,15 +92,8 @@
       </label>
       <div id="cses-filter-status" style="margin-top:4px;font:11px system-ui;color:#444;max-width:260px;line-height:1.3;"></div>
     `;
-    function isDark() {
-      const dm = document.getElementById('darkmode-enabled');
-      if (dm && dm.textContent && dm.textContent.trim() === 'true') return true;
-      const themeMeta = document.getElementById('theme-color');
-      const c = themeMeta && themeMeta.getAttribute('content');
-      return c && c.toLowerCase() === '#292929';
-    }
     function applyTheme() {
-      const dark = isDark();
+      const dark = isDarkTheme();
       if (dark) {
         Object.assign(panel.style, {
           position: 'fixed', top: '6px', left: '6px', background: 'rgba(32,32,32,0.92)',
@@ -121,6 +123,86 @@
     }
     document.body.appendChild(panel);
     return panel;
+  }
+
+  /************* Result page: add Copy buttons for test data (input/correct/user) *************/
+  async function fetchViewContent(url) {
+    const resp = await fetch(url, { credentials: 'same-origin' });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const ct = (resp.headers.get('content-type') || '').toLowerCase();
+    // View endpoints typically return raw text/plain with no HTML wrappers.
+    if (ct.startsWith('text/') || ct.includes('json') || ct.includes('xml') || ct.includes('csv') || ct.includes('charset=')) {
+      return await resp.text();
+    }
+    // For save endpoints (octet-stream), decode as UTF-8 text for clipboard use.
+    try {
+      const blob = await resp.blob();
+      if (blob && blob.text) {
+        return await blob.text();
+      }
+    } catch {}
+    try {
+      const buf = await resp.arrayBuffer();
+      return new TextDecoder('utf-8').decode(buf);
+    } catch {
+      // Fallback to text(); may still work in some browsers
+      return await resp.text();
+    }
+  }
+
+  function styleCopyButton(btn) {
+    const dark = isDarkTheme();
+    Object.assign(btn.style, {
+      display: 'inline-flex', alignItems: 'center', gap: '4px',
+      border: '1px solid ' + (dark ? '#555' : '#bbb'),
+      background: dark ? '#2a2a2a' : '#f5f5f5',
+      color: dark ? '#ddd' : '#222',
+      padding: '1px 6px', fontSize: '11px', borderRadius: '4px', cursor: 'pointer'
+    });
+  }
+
+  function enhanceResultCopyButtons() {
+    const actions = Array.from(document.querySelectorAll('div.samp-actions'));
+    if (!actions.length) return;
+    actions.forEach(act => {
+      if (act.getAttribute('data-copy-enhanced') === '1') return;
+      const view = act.querySelector('a.view');
+      const save = act.querySelector('a.save');
+      const href = view ? view.getAttribute('href') : (save ? save.getAttribute('href') : null);
+      if (!href) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cses-copy-btn';
+      btn.textContent = 'Copy';
+      btn.title = 'Copy full data to clipboard';
+      styleCopyButton(btn);
+      const url = new URL(href, location.origin).toString();
+      let resetTimer = null;
+      btn.addEventListener('click', async () => {
+        if (btn.disabled) return;
+        const prev = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Copying';
+        try {
+          const content = await fetchViewContent(url);
+          await navigator.clipboard.writeText(content);
+          btn.innerHTML = '<i class="fas fa-check"></i> Copied';
+          btn.style.borderColor = '#3c9b3c';
+          btn.style.color = isDarkTheme() ? '#bde5bd' : '#2a6f2a';
+        } catch (e) {
+          console.error('[CSES Copy] Failed to copy', e);
+          btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Failed';
+          btn.style.borderColor = '#b55';
+          btn.style.color = isDarkTheme() ? '#ffbdbd' : '#7a1f1f';
+        } finally {
+          if (resetTimer) clearTimeout(resetTimer);
+          resetTimer = setTimeout(() => { btn.disabled = false; btn.innerHTML = prev; styleCopyButton(btn); }, 1400);
+        }
+      });
+      act.appendChild(document.createTextNode(' '));
+      act.appendChild(btn);
+      act.setAttribute('data-copy-enhanced', '1');
+    });
   }
 
   /** Get selected threshold date (Date at local midnight) */
@@ -215,10 +297,10 @@
 
   /** Main logic */
   async function init() {
-  // Run on problem list and individual task pages (sidebar mini list present)
+  // Run on CSES problemset pages
   const path = location.pathname;
   if (!/\/problemset\//.test(path)) return; // any problemset page
-    const panel = createUI();
+  const panel = createUI();
     const dateInput = /** @type {HTMLInputElement} */ (panel.querySelector('#cses-threshold-date'));
     // Load saved threshold date or default to today
     const saved = localStorage.getItem(THRESHOLD_DATE_KEY);
@@ -290,6 +372,13 @@
 
     applyFilter();
     buildSectionStats();
+
+    // Enhance result page copy buttons
+    if (/\/problemset\/result\//.test(path) || /\/problemset\/view\//.test(path)) {
+      enhanceResultCopyButtons();
+      const mo2 = new MutationObserver(() => enhanceResultCopyButtons());
+      mo2.observe(document.body, { childList: true, subtree: true });
+    }
   }
 
   /** Collect solved icons (including ones we previously hid).
