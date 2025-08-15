@@ -434,6 +434,18 @@
   /**************** Section statistics: [total / correct / wrong / unattended] ***************/
   const sectionQueue = new TaskQueue(2);
 
+  // Extract pure heading title (ignores our injected badges/buttons)
+  function getHeadingTitle(heading) {
+    try {
+      const clone = heading.cloneNode(true);
+      const injected = clone.querySelectorAll('.cses-section-stats, .cses-section-stats-filter, .cses-section-toggle');
+      injected.forEach(n => n.remove());
+      return (clone.textContent || '').trim().toLowerCase();
+    } catch {
+      return (heading.textContent || '').trim().toLowerCase();
+    }
+  }
+
   function findSections() {
     return Array.from(document.querySelectorAll('h2')).map(h => ({
       heading: h,
@@ -512,7 +524,7 @@
   if (!/\/problemset\/list\/?/.test(location.pathname)) return; // no section headings except on list page
     const threshold = getThresholdDate();
     const sections = findSections();
-    let aggTotal=0, aggSolved=0, aggWrong=0, aggUnatt=0, aggFilteredSolved=0, aggFilteredWrong=0, aggFilteredUnatt=0;
+    // First pass: compute and display per-section filtered stats and store them on heading.dataset
     sections.forEach(section => {
       const { heading, list } = section;
       if (!list) return; // skip headers without lists for per-section badges
@@ -535,21 +547,16 @@
         // Per-section filtered
         // Filtered logic: treat hidden previously-solved tasks (originallySolved && !isSolvedNow) as unattended for the filtered period.
         if (isSolvedNow && originallySolved) {
-          filteredSolved++; if (included) aggFilteredSolved++;
+          filteredSolved++;
         } else if (attempted && !originallySolved) {
-          filteredWrong++; if (included) aggFilteredWrong++;
+          filteredWrong++;
         } else if (originallySolved && !isSolvedNow) {
-          filteredUnatt++; if (included) aggFilteredUnatt++;
+          filteredUnatt++;
         } else if (!originallySolved && !attempted) {
-          filteredUnatt++; if (included) aggFilteredUnatt++;
+          filteredUnatt++;
         } else {
           // fallback
-          filteredUnatt++; if (included) aggFilteredUnatt++;
-        }
-        // Overall aggregate: only include if section is not excluded
-        if (included) {
-          aggTotal++;
-          if (originallySolved) aggSolved++; else if (attempted) aggWrong++; else aggUnatt++;
+          filteredUnatt++;
         }
       });
       // Skip headings with zero tasks (handled later as General aggregate)
@@ -563,9 +570,65 @@
       }
   filteredBadge.innerHTML = `[filtered <span style="color:#3c9b3c;">${filteredSolved}</span> / <span style="color:#d28b26;">${filteredWrong}</span> / <span style="color:#777;">${filteredUnatt}</span>]`;
   filteredBadge.title = 'Filtered (date threshold): solved-after-threshold / wrong (attempted unsolved) / old-or-unattended';
+      // persist per-section filtered stats for aggregation
+      heading.dataset.sectionFiltered = JSON.stringify({ solved: filteredSolved, wrong: filteredWrong, unattended: filteredUnatt });
+    });
+    // Second pass: aggregate across included sections only
+    let aggTotal=0, aggSolved=0, aggWrong=0, aggUnatt=0, aggFilteredSolved=0, aggFilteredWrong=0, aggFilteredUnatt=0;
+    sections.forEach(section => {
+      const { heading, list } = section;
+      if (!list) return;
+      const included = heading.dataset.excluded !== '1';
+      if (!included) return;
+      // Overall totals per section (prefer precomputed)
+      let overall = null;
+      try { overall = JSON.parse(heading.dataset.sectionOverall || 'null'); } catch {}
+      if (!overall) {
+        // fallback compute quickly
+        const tasks = Array.from(list.querySelectorAll('li.task'));
+        let total = tasks.length, correct = 0, wrong = 0, unattended = 0;
+        tasks.forEach(li => {
+          const c = classifyTask(li);
+          if (c.solved) correct++; else if (c.attempted) wrong++; else unattended++;
+        });
+        overall = { total, correct, wrong, unattended };
+      }
+      aggTotal += (overall.total || 0);
+      aggSolved += (overall.correct || 0);
+      aggWrong += (overall.wrong || 0);
+      aggUnatt += (overall.unattended || 0);
+      // Filtered totals per section
+      let filt = null;
+      try { filt = JSON.parse(heading.dataset.sectionFiltered || 'null'); } catch {}
+      if (!filt) {
+        // compute from DOM as a last resort
+        const tasks = Array.from(list.querySelectorAll('li.task'));
+        let fs=0, fw=0, fu=0;
+        tasks.forEach(li => {
+          const icon = li.querySelector('span.task-score.icon');
+          if (!icon) return;
+          const originallySolved = icon.dataset.originalSolved === '1' || icon.classList.contains('full');
+          const isSolvedNow = icon.classList.contains('full');
+          const wrongImmediate = icon.classList.contains('zero');
+          const link = li.querySelector('a[href*="/problemset/task/"]');
+          const problemId = link ? (link.getAttribute('href')||'').match(/(\d+)/)?.[1] : null;
+          let attempted = false;
+          if (wrongImmediate) attempted = true; else if (problemId) {
+            const cacheVal = localStorage.getItem(CACHE_PREFIX + problemId);
+            if (cacheVal && cacheVal !== 'NONE') attempted = true;
+          }
+          if (isSolvedNow && originallySolved) fs++;
+          else if (attempted && !originallySolved) fw++;
+          else fu++;
+        });
+        filt = { solved: fs, wrong: fw, unattended: fu };
+      }
+      aggFilteredSolved += (filt.solved || 0);
+      aggFilteredWrong += (filt.wrong || 0);
+      aggFilteredUnatt += (filt.unattended || 0);
     });
     // Aggregate into explicit 'General' heading if present
-    const general = sections.find(s => (s.heading.textContent || '').trim().toLowerCase().startsWith('general'));
+  const general = sections.find(s => getHeadingTitle(s.heading).startsWith('general'));
     if (general) {
       const h = general.heading;
       // Left badge already shows [0/0/0/0] -> replace with aggregate overall
@@ -592,10 +655,10 @@
 
   /** Add include/exclude toggle to a section heading (except General). */
   function addSectionToggle(section) {
-    const { heading, list } = section;
+  const { heading, list } = section;
     if (!list) return;
-    const title = (heading.textContent || '').trim().toLowerCase();
-    if (title.startsWith('general')) return;
+  const title = getHeadingTitle(heading);
+  if (title.startsWith('general')) return;
   const excludedSet = loadExcludedSections();
     let btn = heading.querySelector(':scope > .cses-section-toggle');
     if (!btn) {
