@@ -3,7 +3,7 @@
 {
 	"name": "Node.js & TypeScript",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm"
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -15,7 +15,26 @@
 	// "postCreateCommand": "yarn install",
 
 	// Configure tool-specific properties.
-	// "customizations": {},
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"editor.formatOnSave": true,
+				"editor.formatOnSaveMode": "file",
+				"editor.inlayHints.enabled": "on",
+				"typescript.inlayHints.enumMemberValues.enabled": true,
+				"typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+				"typescript.inlayHints.parameterNames.enabled": "all",
+				"typescript.inlayHints.parameterTypes.enabled": true,
+				"typescript.inlayHints.propertyDeclarationTypes.enabled": true,
+				"typescript.inlayHints.variableTypes.enabled": true,
+				"javascript.inlayHints.functionLikeReturnTypes.enabled": true,
+				"javascript.inlayHints.parameterNames.enabled": "all",
+				"javascript.inlayHints.parameterTypes.enabled": true,
+				"javascript.inlayHints.propertyDeclarationTypes.enabled": true,
+				"javascript.inlayHints.variableTypes.enabled": true
+			}
+		}
+	}
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
