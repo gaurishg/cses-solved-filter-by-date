@@ -1,0 +1,13 @@
+{
+  "name": "cses-solved-filter-by-date",
+  "private": true,
+  "version": "0.1.8",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}

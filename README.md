@@ -1,4 +1,4 @@
-This repository contains a userscript (plain JavaScript, no external deps, no GM_* grants) for Tampermonkey (https://www.tampermonkey.net/) that enhances the CSES Problemset pages (list + individual task pages) (https://cses.fi/problemset/...).
+This repository contains a userscript (TypeScript source compiled to plain JavaScript; no external deps, no GM_* grants) for Tampermonkey (https://www.tampermonkey.net/) that enhances the CSES Problemset pages (list + individual task pages) (https://cses.fi/problemset/...).
 
 Core purpose:
 Provide a date-based view of progress: hide solved check marks for problems whose last submission is before a chosen cutoff date so you can focus on (re)solving more recent material.
@@ -28,7 +28,24 @@ The script parses the first `YYYY-MM-DD HH:MM:SS` timestamp it encounters on the
 6. Section Headings: Each heading shows two bracketed badge groups:
 	- Left (Overall): `total / solved / wrong / unattended`
 	- Right (Filtered): Same metrics after applying the current date filter (older solved problems treated as if unsolved for the filtered view). An aggregate "General" heading gives totals across all sections.
-	- Per-section toggle: Every section (except the first "General") has an "Exclude Section" button that hides its problem list and removes its counts from the "General" totals. Click again to include it back. Your choice is persisted in `localStorage` across reloads.
+	- Per-section toggle: Every section (except the first "General") has a visibility toggle (👁/🙈). Clicking hides its problem list and removes its counts from the "General" totals; clicking again includes it back. Your choice is persisted in `localStorage` across reloads.
+
+## Development (TypeScript)
+
+The source lives in `src/cses-filter.user.ts` and compiles to `cses-filter.user.js` in the repo root.
+
+Build:
+
+```bash
+npm install
+npx tsc
+```
+
+Watch mode:
+
+```bash
+npm run watch
+```
 
 ### Badge Color Legend
 Colors (may depend on your theme, implemented via inline styles):

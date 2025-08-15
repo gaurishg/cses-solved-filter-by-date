@@ -1,0 +1,28 @@
+# Node / TypeScript
+node_modules/
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Caches
+.cache/
+.turbo/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Builds (keep compiled userscript tracked)
+dist/
+coverage/
+
+# Env files
+.env
+.env.*
