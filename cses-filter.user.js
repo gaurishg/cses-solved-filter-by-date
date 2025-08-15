@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CSES Solved Filter by Date
 // @namespace    https://cses.fi/
-// @version      0.1.6
+// @version      0.1.7
 // @description  Hide solved check marks (list & task pages) for problems whose last submission is before a selected date.
 // @author       Gaurish Gangwar
 // @match        https://cses.fi/problemset/list
@@ -518,6 +518,7 @@
       if (!list) return; // skip headers without lists for per-section badges
       const tasks = Array.from(list.querySelectorAll('li.task'));
       let filteredSolved=0, filteredWrong=0, filteredUnatt=0;
+      const included = heading.dataset.excluded !== '1';
       tasks.forEach(li => {
         const icon = li.querySelector('span.task-score.icon');
         if (!icon) return;
@@ -534,19 +535,19 @@
         // Per-section filtered
         // Filtered logic: treat hidden previously-solved tasks (originallySolved && !isSolvedNow) as unattended for the filtered period.
         if (isSolvedNow && originallySolved) {
-          filteredSolved++; aggFilteredSolved++;
+          filteredSolved++; if (included) aggFilteredSolved++;
         } else if (attempted && !originallySolved) {
-          filteredWrong++; aggFilteredWrong++;
+          filteredWrong++; if (included) aggFilteredWrong++;
         } else if (originallySolved && !isSolvedNow) {
-          filteredUnatt++; aggFilteredUnatt++;
+          filteredUnatt++; if (included) aggFilteredUnatt++;
         } else if (!originallySolved && !attempted) {
-          filteredUnatt++; aggFilteredUnatt++;
+          filteredUnatt++; if (included) aggFilteredUnatt++;
         } else {
           // fallback
-          filteredUnatt++; aggFilteredUnatt++;
+          filteredUnatt++; if (included) aggFilteredUnatt++;
         }
         // Overall aggregate: only include if section is not excluded
-        if (heading.dataset.excluded !== '1') {
+        if (included) {
           aggTotal++;
           if (originallySolved) aggSolved++; else if (attempted) aggWrong++; else aggUnatt++;
         }
@@ -569,10 +570,14 @@
       const h = general.heading;
       // Left badge already shows [0/0/0/0] -> replace with aggregate overall
       let overallBadge = h.querySelector(':scope > .cses-section-stats');
-      if (overallBadge) {
-        overallBadge.innerHTML = `[<span style="color:#ccc;">${aggTotal}</span> / <span style="color:#3c9b3c;">${aggSolved}</span> / <span style="color:#d28b26;">${aggWrong}</span> / <span style="color:#777;">${aggUnatt}</span>] `;
-  overallBadge.title = 'Overall totals across all included sections: total / solved / wrong / unattended';
+      if (!overallBadge) {
+        overallBadge = document.createElement('span');
+        overallBadge.className = 'cses-section-stats';
+        overallBadge.style.cssText = 'margin-right:6px;font-weight:normal;font-size:0.75em;color:#888;';
+        h.prepend(overallBadge);
       }
+      overallBadge.innerHTML = `[<span style="color:#ccc;">${aggTotal}</span> / <span style="color:#3c9b3c;">${aggSolved}</span> / <span style="color:#d28b26;">${aggWrong}</span> / <span style="color:#777;">${aggUnatt}</span>] `;
+      overallBadge.title = 'Overall totals across all included sections: total / solved / wrong / unattended';
       let filteredBadge = h.querySelector(':scope > .cses-section-stats-filter');
       if (!filteredBadge) {
         filteredBadge = document.createElement('span');
@@ -615,8 +620,14 @@
       heading.dataset.excluded = '1';
       if (list) list.style.display = 'none';
     }
-    const updateBtnText = () => { btn.textContent = heading.dataset.excluded === '1' ? 'Include Section' : 'Exclude Section'; };
-    updateBtnText();
+    const updateBtnUI = () => {
+      const excluded = heading.dataset.excluded === '1';
+      // Use emoji icons for simplicity (no external deps): 👁 visible, 🙈 hidden
+      btn.textContent = excluded ? '🙈' : '👁';
+      btn.title = excluded ? 'Include Section' : 'Exclude Section';
+      btn.setAttribute('aria-label', btn.title);
+    };
+    updateBtnUI();
     btn.onclick = () => {
       const excluded = heading.dataset.excluded === '1';
       if (excluded) {
@@ -629,7 +640,7 @@
         excludedSet.add(key);
       }
       saveExcludedSections(excludedSet);
-      updateBtnText();
+      updateBtnUI();
       // recompute aggregates to reflect inclusion/exclusion
       updateFilteredSectionStats();
     };
