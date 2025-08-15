@@ -28,6 +28,7 @@ The script parses the first `YYYY-MM-DD HH:MM:SS` timestamp it encounters on the
 6. Section Headings: Each heading shows two bracketed badge groups:
 	- Left (Overall): `total / solved / wrong / unattended`
 	- Right (Filtered): Same metrics after applying the current date filter (older solved problems treated as if unsolved for the filtered view). An aggregate "General" heading gives totals across all sections.
+	- Per-section toggle: Every section (except the first "General") has an "Exclude Section" button that hides its problem list and removes its counts from the "General" totals. Click again to include it back. Your choice is persisted in `localStorage` across reloads.
 
 ### Badge Color Legend
 Colors (may depend on your theme, implemented via inline styles):

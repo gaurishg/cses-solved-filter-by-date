@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CSES Solved Filter by Date
 // @namespace    https://cses.fi/
-// @version      0.1.5
+// @version      0.1.6
 // @description  Hide solved check marks (list & task pages) for problems whose last submission is before a selected date.
 // @author       Gaurish Gangwar
 // @match        https://cses.fi/problemset/list
@@ -40,6 +40,19 @@
   const CACHE_VERSION_KEY = 'cses:lastSubmission:__version';
   const CACHE_VERSION = 'v1';
   const THRESHOLD_DATE_KEY = 'cses:thresholdDate';
+  const EXCLUDED_SECTIONS_KEY = 'cses:excludedSections';
+
+  function loadExcludedSections() {
+    try {
+      const raw = localStorage.getItem(EXCLUDED_SECTIONS_KEY);
+      if (!raw) return new Set();
+      const arr = JSON.parse(raw);
+      return new Set(Array.isArray(arr) ? arr : []);
+    } catch { return new Set(); }
+  }
+  function saveExcludedSections(set) {
+    try { localStorage.setItem(EXCLUDED_SECTIONS_KEY, JSON.stringify(Array.from(set))); } catch {}
+  }
 
   /** Detect CSES dark mode */
   function isDarkTheme() {
@@ -425,7 +438,7 @@
     return Array.from(document.querySelectorAll('h2')).map(h => ({
       heading: h,
       list: h.nextElementSibling && h.nextElementSibling.matches('ul.task-list') ? h.nextElementSibling : null
-    })).filter(s => s.list);
+  }));
   }
 
   function classifyTask(li) {
@@ -448,7 +461,8 @@
 
   function updateSectionHeading(section) {
     const { heading, list } = section;
-    const tasks = Array.from(list.querySelectorAll('li.task'));
+  if (!list) return; // skip headings without a task list (e.g., General)
+  const tasks = Array.from(list.querySelectorAll('li.task'));
     let total = tasks.length, correct = 0, wrong = 0, unattended = 0;
     tasks.forEach(li => {
       const c = classifyTask(li);
@@ -473,9 +487,12 @@
   if (!/\/problemset\/list\/?/.test(location.pathname)) return; // only list page has sections
     const sections = findSections();
     sections.forEach(section => {
-      updateSectionHeading(section); // initial (fast)
+  updateSectionHeading(section); // initial (fast)
+  // add include/exclude toggle (skip General)
+  if (section.list) addSectionToggle(section);
       // queue fetches for pending unsolved tasks
-      const tasks = Array.from(section.list.querySelectorAll('li.task'));
+  if (!section.list) return;
+  const tasks = Array.from(section.list.querySelectorAll('li.task'));
       tasks.forEach(li => {
         const c = classifyTask(li);
         if (c.pending && c.problemId) {
@@ -498,6 +515,7 @@
     let aggTotal=0, aggSolved=0, aggWrong=0, aggUnatt=0, aggFilteredSolved=0, aggFilteredWrong=0, aggFilteredUnatt=0;
     sections.forEach(section => {
       const { heading, list } = section;
+      if (!list) return; // skip headers without lists for per-section badges
       const tasks = Array.from(list.querySelectorAll('li.task'));
       let filteredSolved=0, filteredWrong=0, filteredUnatt=0;
       tasks.forEach(li => {
@@ -513,9 +531,7 @@
           const cacheVal = localStorage.getItem(CACHE_PREFIX + problemId);
             if (cacheVal && cacheVal !== 'NONE') attempted = true;
         }
-        // Overall aggregate from stored dataset (faster) else recompute minimal
-        aggTotal++;
-        if (originallySolved) aggSolved++; else if (attempted) aggWrong++; else aggUnatt++;
+        // Per-section filtered
         // Filtered logic: treat hidden previously-solved tasks (originallySolved && !isSolvedNow) as unattended for the filtered period.
         if (isSolvedNow && originallySolved) {
           filteredSolved++; aggFilteredSolved++;
@@ -528,6 +544,11 @@
         } else {
           // fallback
           filteredUnatt++; aggFilteredUnatt++;
+        }
+        // Overall aggregate: only include if section is not excluded
+        if (heading.dataset.excluded !== '1') {
+          aggTotal++;
+          if (originallySolved) aggSolved++; else if (attempted) aggWrong++; else aggUnatt++;
         }
       });
       // Skip headings with zero tasks (handled later as General aggregate)
@@ -542,15 +563,15 @@
   filteredBadge.innerHTML = `[filtered <span style="color:#3c9b3c;">${filteredSolved}</span> / <span style="color:#d28b26;">${filteredWrong}</span> / <span style="color:#777;">${filteredUnatt}</span>]`;
   filteredBadge.title = 'Filtered (date threshold): solved-after-threshold / wrong (attempted unsolved) / old-or-unattended';
     });
-    // Aggregate into first heading with zero tasks (e.g. General) if present
-    const general = sections.find(s => !s.list.querySelector('li.task'));
+    // Aggregate into explicit 'General' heading if present
+    const general = sections.find(s => (s.heading.textContent || '').trim().toLowerCase().startsWith('general'));
     if (general) {
       const h = general.heading;
       // Left badge already shows [0/0/0/0] -> replace with aggregate overall
       let overallBadge = h.querySelector(':scope > .cses-section-stats');
       if (overallBadge) {
         overallBadge.innerHTML = `[<span style="color:#ccc;">${aggTotal}</span> / <span style="color:#3c9b3c;">${aggSolved}</span> / <span style="color:#d28b26;">${aggWrong}</span> / <span style="color:#777;">${aggUnatt}</span>] `;
-        overallBadge.title = 'Overall totals across all sections: total / solved / wrong / unattended';
+  overallBadge.title = 'Overall totals across all included sections: total / solved / wrong / unattended';
       }
       let filteredBadge = h.querySelector(':scope > .cses-section-stats-filter');
       if (!filteredBadge) {
@@ -560,8 +581,58 @@
         h.appendChild(filteredBadge);
       }
   filteredBadge.innerHTML = `[filtered <span style="color:#3c9b3c;">${aggFilteredSolved}</span> / <span style="color:#d28b26;">${aggFilteredWrong}</span> / <span style="color:#777;">${aggFilteredUnatt}</span>]`;
-  filteredBadge.title = 'Aggregate filtered counts (date threshold) across all sections';
+  filteredBadge.title = 'Aggregate filtered counts (date threshold) across included sections';
     }
+  }
+
+  /** Add include/exclude toggle to a section heading (except General). */
+  function addSectionToggle(section) {
+    const { heading, list } = section;
+    if (!list) return;
+    const title = (heading.textContent || '').trim().toLowerCase();
+    if (title.startsWith('general')) return;
+  const excludedSet = loadExcludedSections();
+    let btn = heading.querySelector(':scope > .cses-section-toggle');
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.className = 'cses-section-toggle';
+      btn.type = 'button';
+      btn.style.marginLeft = '8px';
+      btn.style.fontSize = '11px';
+      btn.style.padding = '1px 6px';
+      btn.style.borderRadius = '4px';
+      btn.style.cursor = 'pointer';
+      // theme-aware
+      const dark = isDarkTheme();
+      btn.style.border = '1px solid ' + (dark ? '#555' : '#bbb');
+      btn.style.background = dark ? '#2a2a2a' : '#f5f5f5';
+      btn.style.color = dark ? '#ddd' : '#222';
+      heading.appendChild(btn);
+    }
+    // Apply persisted state on first render
+    const key = title; // use lowercased section title as key
+    if (excludedSet.has(key)) {
+      heading.dataset.excluded = '1';
+      if (list) list.style.display = 'none';
+    }
+    const updateBtnText = () => { btn.textContent = heading.dataset.excluded === '1' ? 'Include Section' : 'Exclude Section'; };
+    updateBtnText();
+    btn.onclick = () => {
+      const excluded = heading.dataset.excluded === '1';
+      if (excluded) {
+        delete heading.dataset.excluded;
+        if (list) list.style.display = '';
+        excludedSet.delete(key);
+      } else {
+        heading.dataset.excluded = '1';
+        if (list) list.style.display = 'none';
+        excludedSet.add(key);
+      }
+      saveExcludedSections(excludedSet);
+      updateBtnText();
+      // recompute aggregates to reflect inclusion/exclusion
+      updateFilteredSectionStats();
+    };
   }
 
   /** Apply filter logic; if forceRefetch true we ignore cache presence (by deleting entries first) */
